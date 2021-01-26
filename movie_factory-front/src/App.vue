@@ -1,12 +1,30 @@
 <template>
-  <div id="app">
-    <!--Menu H -->
-    <div id="nav"><router-link to="/">Home</router-link> |</div>
+  <div id="app" class="container">
     <router-view />
   </div>
 </template>
 
+<script>
+import MainMenu from "./components/MainMenu";
+
+export default {
+  name: "App",
+  components: {
+    MainMenu,
+  },
+};
+</script>
+
 <style>
+:root {
+  font-size: 16px;
+}
+
+.body {
+  background: #222d32;
+  font-family: "Roboto", sans-serif;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

@@ -1,15 +1,28 @@
 // import nécessaire pour le fonctionnement
 import Vue from "vue";
 import VueRouter from "vue-router";
+// import module pour les rendus de liens
 import Home from "../views/Home.vue";
+import Login from "../views/Login.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
+    // landing page of the application
     path: "/",
-    name: "Home",
+    name: "Login",
+    component: Login,
+  },
+  {
+    path: "/home",
+    name: "home",
     component: Home,
+  },
+  // redirection si URL ne correspond à aucune citée
+  {
+    path: "/*",
+    redirect: "/",
   },
 ];
 
