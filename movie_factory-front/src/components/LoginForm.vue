@@ -53,12 +53,16 @@
         </div>
       </div>
     </div>
-    <!-- je suis ton père -->
   </div>
 </template>
 
 <script>
 import axios from "axios";
+
+// import de la methode qui nous donnera le store
+import { mapState } from "vuex";
+
+import LoginVue from "../views/Login.vue";
 
 export default {
   name: "LoginForm",
@@ -73,9 +77,15 @@ export default {
       passwordColor: "#6c6c6C",
     };
   },
+  computed: {
+    // on importe le store et on le spread avec mapState
+    ...mapState(["login"]),
+  },
   // regroupe les methodes du composants
   methods: {
     handleClick() {
+      let log = this.login.getLoginURL;
+      console.log("handleClick -> log", log);
       // gestion des erreurs
       const mailRegex = new RegExp(
         "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+[.][a-zA-Z0-9-.]+$"
@@ -116,15 +126,14 @@ export default {
         }, 2500);
         return;
       }
+      let userData = {};
 
       axios
-        .post("http://localhost:3050/user/login", {
+        .post(this.login.getLoginURL, {
           email: this.username,
           password: this.password,
         })
         .then(async function (response) {
-          console.log("handleClick -> response", response.status);
-
           // extraction du token par destructuration
           let { token } = await response.data;
           // mise en forme du payload
@@ -133,16 +142,16 @@ export default {
           var payload = Buffer.from(base64Payload, "base64");
           // parsing du buffer en json
           let result = JSON.parse(payload.toString());
+          console.log(result);
           console.log("handleClick -> result", result);
+          userData = result;
+          console.log("test in catch", this.getLoggedUser);
+          this.$store.dispatch("fetchUser", userData);
         })
-        .catch(this.declinePassword());
-
-      // function (error) {
-      //   // handle error
-      //
-      // }
-      // verif du formulaire avant submit => Regex
+        .catch(() => this.declinePassword());
+      console.log("test hors catch", this.getLoggedUser);
     },
+
     resetPassword() {
       console.log("reset");
     },

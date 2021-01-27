@@ -8,11 +8,9 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   // l'état (state) de l'application à un instant T
   state: {
-    apiBaseURL:"https://localhost/api/movie",
+    apiBaseURL: "https://localhost/api/movie",
     login: {
-      getLoginURL: "",
-      getLoginToken: "",
-      getTokenVerifyURL: "",
+      getLoginURL: "http://localhost:3050/user/login",
       getLoggedUser: {},
     },
   },
@@ -22,8 +20,17 @@ export default new Vuex.Store({
    * functions de type f(state,payload) à l'aide des commits
    * forcément synchrone
    */
-  mutations: {},
+  mutations: {
+    selectUser(state, payload) {
+      state.login.getLoggedUser = payload;
+    },
+  },
   // permet de commit les mutations
-  actions: {},
+  actions: {
+    fetchUser(context, payload) {
+      context.commit("selectUser", payload);
+    },
+  },
   modules: {},
+  getter: {},
 });
