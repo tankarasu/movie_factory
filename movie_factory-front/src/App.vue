@@ -22,6 +22,7 @@ export default {
 
 .body {
   background: #222d32;
+  background: url("../src/assets/fond.jpg");
   font-family: "Roboto", sans-serif;
 }
 

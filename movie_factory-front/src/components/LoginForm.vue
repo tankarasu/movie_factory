@@ -1,49 +1,59 @@
 <template>
   <div class="container">
-    <!-- je suis ton père -->
-    <div class="row">
-      <div class="col-lg-3 col-md-2"></div>
-      <div class="col-lg-6 col-md-8 login-box">
-        <div class="col-lg-12 login-key">
-          <i class="fa fa-key" aria-hidden="true"></i>
-        </div>
-        <div class="col-lg-12 login-title">Login</div>
-
-        <div class="col-lg-12 login-form">
-          <div class="col-lg-12 login-form">
-            <form>
-              <div class="form-group">
-                <label class="form-control-label">Username</label>
-                <input type="text" class="form-control" v-model="username" />
-              </div>
-              <div class="form-group">
-                <label class="form-control-label">Password</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  v-model="password"
-                />
-              </div>
-
-              <div class="col-lg-12 loginbttm">
-                <div class="col-lg-6 login-btm login-text"></div>
-                <div class="col-lg-6 login-btm login-button">
-                  <!-- prevent previent le rechargement -->
-                  <button
-                    type="submit"
-                    class="btn btn-outline-danger"
-                    @click.prevent="handleClick()"
-                  >
-                    Login
-                  </button>
-                </div>
-              </div>
-            </form>
+    <div class="LoginForm login-box">
+      <div class="loginHeader">
+        <img src="../assets/the-movie-factory.png" alt="logo" class="logo" />
+      </div>
+      <div class="login">
+        <form action="">
+          <!-- login adressMail -->
+          <div class="form-group log">
+            <label class="form-control-label" :style="{ color: emailColor }">{{
+              labelEmail
+            }}</label>
+            <input type="text" class="form-control" v-model="username" />
+          </div>
+          <div class="form-group log">
+            <label
+              class="form-control-label"
+              :style="{ color: passwordColor }"
+              >{{ labelPassword }}</label
+            >
+            <input type="password" class="form-control" v-model="password" />
+          </div>
+          <div class="reset">
+            <span @click="forgotPassword()">forgot </span>|<span
+              @click="resetPassword()"
+            >
+              reset </span
+            >|<span> sign up</span>
+          </div>
+          <!-- prevent previent le rechargement -->
+          <button
+            type="submit"
+            class="btn btn-outline-danger"
+            @click.prevent="handleClick()"
+            @keyup.enter="handleClick()"
+          >
+            Login
+          </button>
+        </form>
+      </div>
+      <div class="loginFooter">
+        <!-- info récup MDP -->
+        <div class="testimonial-quote right">
+          <div class="quote-container">
+            <div>
+              <blockquote>
+                <p>Le bouton rouge Régis</p>
+              </blockquote>
+              <cite><span>-La cité de la peur-</span></cite>
+            </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-2"></div>
       </div>
     </div>
+    <!-- je suis ton père -->
   </div>
 </template>
 
@@ -57,17 +67,64 @@ export default {
     return {
       username: "",
       password: "",
+      labelEmail: "Email",
+      emailColor: "#6c6c6c",
+      labelPassword: "Password",
+      passwordColor: "#6c6c6C",
     };
   },
   // regroupe les methodes du composants
   methods: {
     handleClick() {
+      // gestion des erreurs
+      const mailRegex = new RegExp(
+        "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+[.][a-zA-Z0-9-.]+$"
+      );
+
+      // email vide
+      if (this.username.trim() === "") {
+        this.emailColor = "red";
+        this.labelEmail = "Veuillez renseigner une adresse email";
+        setTimeout(() => {
+          this.labelEmail = "Email";
+          this.emailColor = "#6c6c6c";
+          this.username = "";
+        }, 2500);
+        return;
+      }
+
+      // email non valide
+      if (!mailRegex.test(this.username)) {
+        this.emailColor = "red";
+        this.labelEmail = "Veuillez renseigner une adresse email valide";
+        setTimeout(() => {
+          this.labelEmail = "Email";
+          this.emailColor = "#6c6c6c";
+          this.username = "";
+        }, 2500);
+        return;
+      }
+
+      // password vide
+      if (this.password.trim() === "") {
+        this.passwordColor = "red";
+        this.labelPassword = "Veuillez renseigner un mot de passe";
+        setTimeout(() => {
+          this.labelPassword = "Password";
+          this.passwordColor = "#6c6c6c";
+          this.password = "";
+        }, 2500);
+        return;
+      }
+
       axios
         .post("http://localhost:3050/user/login", {
           email: this.username,
           password: this.password,
         })
         .then(async function (response) {
+          console.log("handleClick -> response", response.status);
+
           // extraction du token par destructuration
           let { token } = await response.data;
           // mise en forme du payload
@@ -78,33 +135,49 @@ export default {
           let result = JSON.parse(payload.toString());
           console.log("handleClick -> result", result);
         })
-        .catch(function (error) {
-          // handle error
-          // à travailler
-          console.log(error);
-        });
+        .catch(this.declinePassword());
+
+      // function (error) {
+      //   // handle error
+      //
+      // }
       // verif du formulaire avant submit => Regex
+    },
+    resetPassword() {
+      console.log("reset");
+    },
+    forgotPassword() {
+      console.log("forgot");
+    },
+    declinePassword() {
+      this.passwordColor = "red";
+      this.labelPassword = "Mot de passe incorrect";
+      setTimeout(() => {
+        this.labelPassword = "Password";
+        this.passwordColor = "#6c6c6c";
+        this.password = "";
+      }, 2500);
+      return;
     },
   },
 };
 </script>
 
 <style scoped>
-.login-box {
-  margin-top: 75px;
-  height: auto;
-  background: #1a2226;
-  text-align: center;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+.logo {
+  width: 100%;
 }
 
-.login-key {
-  height: 100px;
-  font-size: 80px;
-  line-height: 100px;
-  background: -webkit-linear-gradient(#27ef9f, #0db8de);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.login-box {
+  width: 450px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-225px);
+  margin-top: 75px;
+  height: auto;
+  background: #111416ea;
+  text-align: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
 .login-title {
@@ -117,15 +190,28 @@ export default {
   color: #ecf0f5;
 }
 
+.loginHeader img {
+  margin-top: 2rem;
+}
+
 .login-form {
   margin-top: 25px;
   text-align: left;
 }
 
+.log {
+  display: flex;
+  margin-top: 40px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 input[type="text"] {
-  background-color: #1a2226;
+  width: 75%;
+  background-color: #111416ea;
   border: none;
-  border-bottom: 2px solid #0db8de;
+  border-bottom: 2px solid #ecf0f5;
   border-top: 0px;
   border-radius: 0px;
   font-weight: bold;
@@ -133,12 +219,14 @@ input[type="text"] {
   margin-bottom: 20px;
   padding-left: 0px;
   color: #ecf0f5;
+  text-align: center;
 }
 
 input[type="password"] {
-  background-color: #1a2226;
+  width: 75%;
+  background-color: #111416ea;
   border: none;
-  border-bottom: 2px solid #0db8de;
+  border-bottom: 2px solid #ecf0f5;
   border-top: 0px;
   border-radius: 0px;
   font-weight: bold;
@@ -146,6 +234,7 @@ input[type="password"] {
   padding-left: 0px;
   margin-bottom: 20px;
   color: #ecf0f5;
+  text-align: center;
 }
 
 .form-group {
@@ -173,7 +262,7 @@ label {
 }
 
 .form-control-label {
-  font-size: 10px;
+  font-size: 1rem;
   color: #6c6c6c;
   font-weight: bold;
   letter-spacing: 1px;
@@ -193,23 +282,95 @@ label {
   right: 0px;
 }
 
-.login-btm {
-  float: left;
+.testimonial-quote {
+  font-size: 16px;
 }
 
-.login-button {
-  padding-right: 0px;
+.testimonial-quote blockquote {
+  /* Negate theme styles */
+  border: 0;
+  margin: 0;
+  padding: 0;
+
+  background: none;
+  color: gray;
+  font-family: Georgia, serif;
+  font-size: 1.5em;
+  font-style: italic;
+  line-height: 1.4 !important;
+  margin: 0;
+  position: relative;
+  text-shadow: 0 1px white;
+  z-index: 600;
+}
+
+blockquote {
   text-align: right;
-  margin-bottom: 25px;
 }
 
-.login-text {
-  text-align: left;
-  padding-left: 0px;
-  color: #a2a4a4;
+.testimonial-quote blockquote * {
+  box-sizing: border-box;
 }
 
-.loginbttm {
-  padding: 0px;
+.testimonial-quote blockquote p {
+  color: #75808a;
+  line-height: 1.4 !important;
+}
+
+.testimonial-quote blockquote p:first-child:before {
+  content: "\201C";
+  color: #81bedb;
+  font-size: 5.5em;
+  font-weight: 700;
+  opacity: 0.3;
+  position: absolute;
+  top: -0.4em;
+  left: 0.05em;
+  text-shadow: none;
+  z-index: -300;
+}
+
+.testimonial-quote cite {
+  color: gray;
+  display: block;
+  font-size: 0.8em;
+}
+
+.testimonial-quote cite span {
+  color: #5e5e5e;
+  font-size: 1em;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-shadow: 0 1px white;
+}
+
+.testimonial-quote {
+  position: relative;
+  left: 20px;
+  padding: 2rem 0 1rem 0;
+}
+
+.testimonial-quote .quote-container {
+  padding-left: 100px;
+}
+
+.testimonial-quote.right .quote-container {
+  padding-left: 0;
+  padding-right: 150px;
+}
+
+.testimonial-quote.right cite {
+  text-align: right;
+}
+
+.reset {
+  color: #6c6c6c;
+  margin-bottom: 1rem;
+}
+
+.reset span:hover {
+  color: #ecf0f5;
 }
 </style>
