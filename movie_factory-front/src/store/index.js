@@ -22,7 +22,9 @@ export default new Vuex.Store({
    */
   mutations: {
     selectUser(state, payload) {
-      state.login.getLoggedUser = payload;
+      state.login.getLoggedUser.email = payload.email;
+      state.login.getLoggedUser.password = payload.password;
+      state.login.getLoggedUser._id = payload._id;
     },
   },
   // permet de commit les mutations

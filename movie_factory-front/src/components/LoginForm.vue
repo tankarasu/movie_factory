@@ -133,7 +133,8 @@ export default {
           email: this.username,
           password: this.password,
         })
-        .then(async function (response) {
+        // arrow function car elle bind le this
+        .then(async (response) => {
           // extraction du token par destructuration
           let { token } = await response.data;
           // mise en forme du payload
@@ -142,14 +143,9 @@ export default {
           var payload = Buffer.from(base64Payload, "base64");
           // parsing du buffer en json
           let result = JSON.parse(payload.toString());
-          console.log(result);
-          console.log("handleClick -> result", result);
-          userData = result;
-          console.log("test in catch", this.getLoggedUser);
-          this.$store.dispatch("fetchUser", userData);
+          this.$store.commit("selectUser", result);
         })
         .catch(() => this.declinePassword());
-      console.log("test hors catch", this.getLoggedUser);
     },
 
     resetPassword() {
