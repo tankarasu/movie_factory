@@ -13,6 +13,8 @@ export default new Vuex.Store({
       getLoginURL: "http://localhost:3050/user/login",
       getLoggedUser: {},
     },
+    popularFilm: [],
+    categories: [],
   },
 
   /** -- Mutations--
@@ -22,15 +24,25 @@ export default new Vuex.Store({
    */
   mutations: {
     selectUser(state, payload) {
-      state.login.getLoggedUser.email = payload.email;
-      state.login.getLoggedUser.password = payload.password;
-      state.login.getLoggedUser._id = payload._id;
+      state.login.getLoggedUser = payload.data;
+    },
+    addPopularFilm(state, payload) {
+      state.popularFilm = payload;
+    },
+    addCategories(state, payload) {
+      state.categories = payload;
     },
   },
   // permet de commit les mutations
   actions: {
     fetchUser(context, payload) {
       context.commit("selectUser", payload);
+    },
+    fetchPopularFilm(context, payload) {
+      context.commit("addPopularFilm", payload);
+    },
+    fetchCategories(context, payload) {
+      context.commit("addCategories", payload);
     },
   },
   modules: {},

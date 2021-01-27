@@ -57,6 +57,8 @@
 </template>
 
 <script>
+import Vue from "vue";
+import VueRouter from "vue-router";
 import axios from "axios";
 
 // import de la methode qui nous donnera le store
@@ -84,6 +86,7 @@ export default {
   // regroupe les methodes du composants
   methods: {
     handleClick() {
+      // TODO modulariser si possible
       let log = this.login.getLoginURL;
       console.log("handleClick -> log", log);
       // gestion des erreurs
@@ -114,7 +117,6 @@ export default {
         }, 2500);
         return;
       }
-
       // password vide
       if (this.password.trim() === "") {
         this.passwordColor = "red";
@@ -127,7 +129,6 @@ export default {
         return;
       }
       let userData = {};
-
       axios
         .post(this.login.getLoginURL, {
           email: this.username,
@@ -143,11 +144,16 @@ export default {
           var payload = Buffer.from(base64Payload, "base64");
           // parsing du buffer en json
           let result = JSON.parse(payload.toString());
-          this.$store.commit("selectUser", result);
+          console.log("test1")
+          this.$store.dispatch("fetchUser", result);
+          console.log("test2")
+          this.goHome();
         })
         .catch(() => this.declinePassword());
     },
-
+    goHome() {
+      this.$router.push("/home");
+    },
     resetPassword() {
       console.log("reset");
     },
