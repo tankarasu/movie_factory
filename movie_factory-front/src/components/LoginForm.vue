@@ -7,9 +7,7 @@
         <div class="col-lg-12 login-key">
           <i class="fa fa-key" aria-hidden="true"></i>
         </div>
-        <div class="col-lg-12 login-title">
-          Login
-        </div>
+        <div class="col-lg-12 login-title">Login</div>
 
         <div class="col-lg-12 login-form">
           <div class="col-lg-12 login-form">
@@ -69,13 +67,20 @@ export default {
           email: this.username,
           password: this.password,
         })
-        .then(function(response) {
-          // handle success
-          console.log(response.data.token);
-          
+        .then(async function (response) {
+          // extraction du token par destructuration
+          let { token } = await response.data;
+          // mise en forme du payload
+          var base64Payload = token.split(".")[1];
+          // transformation du payload en buffer
+          var payload = Buffer.from(base64Payload, "base64");
+          // parsing du buffer en json
+          let result = JSON.parse(payload.toString());
+          console.log("handleClick -> result", result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           // handle error
+          // à travailler
           console.log(error);
         });
       // verif du formulaire avant submit => Regex
