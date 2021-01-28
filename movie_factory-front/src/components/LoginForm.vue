@@ -8,12 +8,14 @@
         <form action="">
           <!-- login adressMail -->
           <div class="form-group log">
+            <!-- EMAIL -->
             <label class="form-control-label" :style="{ color: emailColor }">{{
               labelEmail
             }}</label>
-            <input type="text" class="form-control" v-model="username" />
+            <input type="text" class="form-control" v-model="email" />
           </div>
-          <div class="form-group log">
+          <!-- PASSWORD -->
+          <div class="form-group log" v-if="!forgot">
             <label
               class="form-control-label"
               :style="{ color: passwordColor }"
@@ -21,22 +23,82 @@
             >
             <input type="password" class="form-control" v-model="password" />
           </div>
+          <!-- USERNAME - PSEUDO -->
+          <div class="form-group log" v-if="signup">
+            <label class="form-control-label" :style="{ color: passwordColor }"
+              >username</label
+            >
+            <input type="text" class="form-control" v-model="username" />
+          </div>
+          <!-- New Password -->
+          <div class="form-group log" v-if="!forgot & reset">
+            <label class="form-control-label" :style="{ color: passwordColor }"
+              >new {{ labelPassword }}</label
+            >
+            <input type="password" class="form-control" v-model="newPassword" />
+          </div>
+          <!-- MESSAGE SERVEUR BROWSER -->
+          <span id="messageServeur" class="text-warning">{{
+            serveurMessage
+          }}</span>
+          <!-- 3 spans reset forgot signup -->
           <div class="reset">
             <span @click="forgotPassword()">forgot </span>|<span
               @click="resetPassword()"
             >
               reset </span
-            >|<span> sign up</span>
+            >|<span @click="handleSignup()"> sign up</span>
           </div>
-          <!-- prevent previent le rechargement -->
-          <button
-            type="submit"
-            class="btn btn-outline-danger"
-            @click.prevent="handleClick()"
-            @keyup.enter="handleClick()"
-          >
-            Login
-          </button>
+
+          <!-- affichage conditionnel des boutons -->
+          <div class="boutons">
+            <!-- prevent previent le rechargement -->
+            <button
+              v-if="!reset && !signup && !forgot"
+              type="submit"
+              class="btn btn-outline-danger"
+              @click.prevent="handleClick()"
+              @keyup.enter="handleClick()"
+            >
+              Login
+            </button>
+            <button
+              v-if="forgot | signup | reset"
+              type="submit"
+              class="btn btn-outline-secondary"
+              @click.prevent="handleCancel()"
+              @keyup.enter="handleCancel()"
+            >
+              Cancel
+            </button>
+            <button
+              v-if="forgot"
+              type="submit"
+              class="btn btn-outline-info"
+              @click.prevent="sendMail()"
+              @keyup.enter="sendMail()"
+            >
+              Send
+            </button>
+            <button
+              v-if="reset"
+              type="submit"
+              class="btn btn-outline-warning"
+              @click.prevent="handleClick()"
+              @keyup.enter="handleClick()"
+            >
+              Reset
+            </button>
+            <button
+              v-if="signup"
+              type="submit"
+              class="btn btn-outline-success"
+              @click.prevent="signups()"
+              @keyup.enter="signups()"
+            >
+              Sign Up
+            </button>
+          </div>
         </form>
       </div>
       <div class="loginFooter">
@@ -45,7 +107,10 @@
           <div class="quote-container">
             <div>
               <blockquote>
-                <p>Le bouton rouge Régis</p>
+                <p v-if="!forgot && !reset && !signup">Le bouton rouge Régis</p>
+                <p v-if="forgot">Le bouton bleu Régis</p>
+                <p v-if="reset">Le bouton jaune Régis</p>
+                <p v-if="signup">Le bouton vert Régis</p>
               </blockquote>
               <cite><span>-La cité de la peur-</span></cite>
             </div>
@@ -71,8 +136,14 @@ export default {
   props: {},
   data() {
     return {
+      forgot: false,
+      reset: false,
+      signup: false,
       username: "",
+      email: "",
+      newPassword: "",
       password: "",
+      serveurMessage: "",
       labelEmail: "Email",
       emailColor: "#6c6c6c",
       labelPassword: "Password",
@@ -153,10 +224,48 @@ export default {
       this.$router.push("/home");
     },
     resetPassword() {
-      console.log("reset");
+      this.reset = true;
+      this.forgot = false;
+      this.signup = false;
     },
     forgotPassword() {
-      console.log("forgot");
+      this.forgot = true;
+      this.signup = false;
+      this.reset = false;
+    },
+    handleSignup() {
+      this.signup = true;
+      this.reset = false;
+      this.forgot = false;
+    },
+    signups() {
+      axios
+        .post("http://localhost:3050/user/signup", {
+          email: this.email,
+          password: this.password,
+          username: this.username,
+        })
+        .then((response) => {
+          if (response.data == "email déja utilisé") {
+            this.username = response.data + " Régis";
+            setTimeout(() => (this.username = ""), 2000);
+          }
+        })
+        .catch((err) => console.log(err));
+    },
+    sendMail() {
+      this.serveurMessage = "Un email de réinitialisation vient d'être envoyé";
+      setTimeout(() => {
+        this.serveurMessage = "";
+        this.signup = false;
+        this.reset = false;
+        this.forgot = false;
+      }, 2000);
+    },
+    handleCancel() {
+      this.signup = false;
+      this.reset = false;
+      this.forgot = false;
     },
     declinePassword() {
       this.passwordColor = "red";
@@ -381,5 +490,11 @@ blockquote {
 
 .reset span:hover {
   color: #ecf0f5;
+}
+
+.boutons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 </style>
