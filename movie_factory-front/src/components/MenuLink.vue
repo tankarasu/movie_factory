@@ -1,5 +1,5 @@
 <template>
-  <div class="col-12 mb-2 cat" @click="handleClick()">{{ name }}</div>
+  <li class="col-12 mb-2 cat" @click="handleClick()">{{ name }}</li>
 </template>
 
 <script>
@@ -15,13 +15,25 @@ export default {
   props: ["name", "id"],
   methods: {
     handleClick() {
-      axios
-        .get(`http://localhost:3050/api/movie/genre/${this.id}`)
-        .then(async (Response) => {
-          let result = await Response.data;
-          this.$store.dispatch("fetchPopularFilm", result);
-        })
-        .catch((err) => console.log(err));
+      if (parseInt(this.name, 10) >= 2017 && parseInt(this.name, 10) <= 2021) {
+        axios
+          .get(
+            `http://localhost:3050/api/movie/year/${parseInt(this.name, 10)}`
+          )
+          .then(async (Response) => {
+            let result = await Response.data;
+            this.$store.dispatch("fetchPopularFilm", result);
+          })
+          .catch((err) => console.log(err));
+      } else {
+        axios
+          .get(`http://localhost:3050/api/movie/genre/${this.id}`)
+          .then(async (Response) => {
+            let result = await Response.data;
+            this.$store.dispatch("fetchPopularFilm", result);
+          })
+          .catch((err) => console.log(err));
+      }
     },
   },
 };

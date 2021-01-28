@@ -9,6 +9,8 @@ export default new Vuex.Store({
   // l'état (state) de l'application à un instant T
   state: {
     apiBaseURL: "https://localhost/api/movie",
+    cast: [],
+    selectedFilm: {},
     login: {
       getLoginURL: "http://localhost:3050/user/login",
       getLoggedUser: {},
@@ -32,6 +34,12 @@ export default new Vuex.Store({
     addCategories(state, payload) {
       state.categories = payload;
     },
+    addOneFilm(state, payload) {
+      state.selectedFilm = payload;
+    },
+    addCast(state, payload) {
+      state.cast = payload;
+    },
   },
   // permet de commit les mutations
   actions: {
@@ -43,6 +51,12 @@ export default new Vuex.Store({
     },
     fetchCategories(context, payload) {
       context.commit("addCategories", payload);
+    },
+    addFilm(context, payload) {
+      context.commit("addOneFilm", payload);
+    },
+    fetchCast(context, payload) {
+      context.commit("addCast", payload);
     },
   },
   modules: {},

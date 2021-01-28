@@ -5,9 +5,11 @@
       v-for="(film, index) in popularFilm.results"
       :key="index"
       :title="film.title"
+      :film="film"
       :description="film.overview"
       :vote="film.vote_average"
       :path="film.poster_path"
+      compPath="/home"
     ></movie-card>
   </div>
 </template>
@@ -22,6 +24,11 @@ export default {
   computed: {
     // on importe le store et on le spread avec mapState
     ...mapState(["popularFilm"]),
+  },
+  methods: {
+    console() {
+      console.log("movie console");
+    },
   },
 };
 </script>

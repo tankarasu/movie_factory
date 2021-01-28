@@ -1,5 +1,5 @@
 <template>
-  <div class="row p-1 m-0 movieCard">
+  <div class="row p-1 m-0 movieCard" @click="selectFilm(film)">
     <div class="col-4 p-0">
       <img
         class="moviePict"
@@ -29,8 +29,17 @@
 export default {
   name: "MovieCard",
   components: {},
+  methods: {
+    async selectFilm(film) {
+      await this.$store.dispatch("addFilm", film);
+      if (this.$route.path !== "/film") {
+        this.$router.push("/film");
+      }
+
+    },
+  },
   // tableau de strings pour les props
-  props: ["title", "description", "vote", "path"],
+  props: ["title", "description", "vote", "path", "film"],
 };
 </script>
 
