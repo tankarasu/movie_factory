@@ -7,6 +7,7 @@
       <li>Communauté</li>
       <li>searchBar</li>
       <li>logout</li>
+      <li>fr</li>
     </ul>
   </header>
 </template>

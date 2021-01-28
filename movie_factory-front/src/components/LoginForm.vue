@@ -144,9 +144,7 @@ export default {
           var payload = Buffer.from(base64Payload, "base64");
           // parsing du buffer en json
           let result = JSON.parse(payload.toString());
-          console.log("test1")
           this.$store.dispatch("fetchUser", result);
-          console.log("test2")
           this.goHome();
         })
         .catch(() => this.declinePassword());

@@ -2,8 +2,8 @@
   <div class="home">
     <Navbar></Navbar>
     <div class="row contentPage">
-      <Menu class="col-3"></Menu>
-      <Main class="col-9"></Main>
+      <Menu class="col-2"></Menu>
+      <Main class="col-10"></Main>
     </div>
   </div>
 </template>
