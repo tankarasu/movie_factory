@@ -159,32 +159,31 @@ export default {
     handleClick() {
       // TODO modulariser si possible
       let log = this.login.getLoginURL;
-      console.log("handleClick -> log", log);
       // gestion des erreurs
       const mailRegex = new RegExp(
         "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+[.][a-zA-Z0-9-.]+$"
       );
 
       // email vide
-      if (this.username.trim() === "") {
+      if (this.email.trim() === "") {
         this.emailColor = "red";
         this.labelEmail = "Veuillez renseigner une adresse email";
         setTimeout(() => {
           this.labelEmail = "Email";
           this.emailColor = "#6c6c6c";
-          this.username = "";
+          this.email = "";
         }, 2500);
         return;
       }
 
       // email non valide
-      if (!mailRegex.test(this.username)) {
+      if (!mailRegex.test(this.email)) {
         this.emailColor = "red";
         this.labelEmail = "Veuillez renseigner une adresse email valide";
         setTimeout(() => {
           this.labelEmail = "Email";
           this.emailColor = "#6c6c6c";
-          this.username = "";
+          this.email = "";
         }, 2500);
         return;
       }
@@ -202,7 +201,7 @@ export default {
       let userData = {};
       axios
         .post(this.login.getLoginURL, {
-          email: this.username,
+          email: this.email,
           password: this.password,
         })
         // arrow function car elle bind le this
