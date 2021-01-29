@@ -13,11 +13,12 @@
             alt="picture"
           />
         </div>
+
         <div class="selectedFilmDescribe">
           <iframe
             width="480"
             height="320"
-            src="https://www.youtube.com/embed/ZwKhufmMxko"
+            :src="$store.state.videoPath"
             frameborder="0"
             allowfullscreen
           ></iframe>
@@ -31,8 +32,7 @@
           <span class="badge badge-danger" @click="addFavorite(selectedFilm.id)"
             >+</span
           >
-        </p>
-        <p>
+
           Seen/unseen
           <span class="badge badge-success" @click="addToSeen(selectedFilm.id)"
             >+</span
@@ -152,6 +152,10 @@ export default {
     },
   },
   beforeMount() {
+    console.log("before Mount l155");
+  },
+  beforeUpdate() {
+    console.log("before update l158");
     axios
       .get(`http://localhost:3050/api/movie/credits/${this.selectedFilm.id}`)
       .then(async (response) => {
@@ -161,15 +165,36 @@ export default {
       })
       .catch((err) => console.log(err));
   },
-  beforeUpdate() {
+  updated() {
+    console.log("updated l169");
+  },
+  created() {
+    console.log("created l172");
+  },
+  beforeCreate() {
+    console.log("before create l175");
+  },
+  beforeDestroy() {
+    console.log("before destroy l178");
+  },
+  destroyed() {
+    console.log("destroyed l181");
+  },
+  mounted() {
+    console.log("mounted l184");
     axios
-      .get(`http://localhost:3050/api/movie/credits/${this.selectedFilm.id}`)
-      .then(async (response) => {
-        let result = await response.data;
-        result = result.cast.slice(0, 5);
-        this.$store.dispatch("fetchCast", result);
+      .get(`http://localhost:3050/api/movie/video/${this.selectedFilm.id}`)
+      .then(async (res) => {
+        console.log("link:", res.data.results[0]);
+        if (res.data.results[0].site == "YouTube") {
+          let path =
+            (await "https://www.youtube.com/embed/") +
+            (await res.data.results[0].key);
+          this.$store.dispatch("fetchVideoPath", path);
+        } else {
+        }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => err);
   },
 };
 </script>
@@ -221,6 +246,10 @@ div {
   margin-bottom: 3rem;
 }
 
+.selectedFilm {
+  background: #111416ea;
+}
+
 .selectedFilmDescribe {
   display: flex;
   flex-direction: column;
@@ -240,6 +269,7 @@ div {
   transition: all ease-in-out 0.25s;
   width: 0;
   height: 250px;
+  background: #111416ea;
 }
 
 .cardDescription h5,

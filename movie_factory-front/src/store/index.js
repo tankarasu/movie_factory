@@ -11,6 +11,7 @@ export default new Vuex.Store({
     apiBaseURL: "https://localhost/api/movie",
     cast: [],
     selectedFilm: {},
+    videoPath: "",
     login: {
       getLoginURL: "http://localhost:3050/user/login",
       getLoggedUser: {},
@@ -40,6 +41,9 @@ export default new Vuex.Store({
     addCast(state, payload) {
       state.cast = payload;
     },
+    addPath(state, payload) {
+      state.videoPath = payload;
+    },
   },
   // permet de commit les mutations
   actions: {
@@ -57,6 +61,9 @@ export default new Vuex.Store({
     },
     fetchCast(context, payload) {
       context.commit("addCast", payload);
+    },
+    fetchVideoPath(context, payload) {
+      context.commit("addPath", payload);
     },
   },
   modules: {},

@@ -1,5 +1,5 @@
 <template>
-  <header class="navMenu container">
+  <header class="navMenu container sticky-top">
     <div class="headerTitle">
       <img src="../assets/homeLogo.png" alt="logo" id="logo" />
       <h1>The Movie Factory</h1>
