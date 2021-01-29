@@ -157,6 +157,7 @@ export default {
     },
     forgotPassword() {
       console.log("forgot");
+      
     },
     declinePassword() {
       this.passwordColor = "red";
