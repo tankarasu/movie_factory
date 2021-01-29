@@ -147,6 +147,22 @@ export default {
           let result = await response.data;
           this.$store.dispatch("addFilm", result);
           this.actorsFilm = [];
+
+          axios
+            .get(
+              `http://localhost:3050/api/movie/video/${this.selectedFilm.id}`
+            )
+            .then(async (res) => {
+              console.log("link:", res.data.results[0]);
+              if (res.data.results[0].site == "YouTube") {
+                let path =
+                  (await "https://www.youtube.com/embed/") +
+                  (await res.data.results[0].key);
+                this.$store.dispatch("fetchVideoPath", path);
+              } else {
+              }
+            })
+            .catch((err) => err);
         })
         .catch((err) => console.log(err));
     },
