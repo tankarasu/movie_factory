@@ -35,11 +35,10 @@ export default {
       if (this.$route.path !== "/film") {
         this.$router.push("/film");
       }
-
     },
   },
   // tableau de strings pour les props
-  props: ["title", "description", "vote", "path", "film"],
+  props: ["title", "description", "vote", "path", "film", "isActive"],
 };
 </script>
 

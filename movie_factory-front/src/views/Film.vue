@@ -2,40 +2,93 @@
   <div>
     <navbar></navbar>
     <div class="selectedFilm">
-      <img
-        class="moviePict"
-        :src="`https://image.tmdb.org/t/p/w300/${selectedFilm.poster_path}`"
-        alt="picture"
-      />
-      <h2>{{ selectedFilm.title }}</h2>
-      <p>{{ selectedFilm.overview }}</p>
-      <p>popularity: {{ selectedFilm.popularity }}</p>
-      <p>release: {{ selectedFilm.release_date }}</p>
-      <p>popularity vote average: {{ selectedFilm.vote_average }}</p>
-      <p>popularity vote count: {{ selectedFilm.vote_count }}</p>
-      <div
-        v-for="(actor, index) in cast"
-        :key="index"
-        @click="handleActor(actor.id)"
-      >
-        <img
-          class="photoActor"
-          :src="`https://image.tmdb.org/t/p/w200/${actor.profile_path}`"
-          alt="photo"
-        />
-        <h4>{{ actor.name }}</h4>
-        <p>popularity: {{ actor.popularity }}</p>
+      <div id="filmHeader">
+        <h2>{{ selectedFilm.title }}</h2>
       </div>
-      <div v-if="actorsFilm.length != 0">
-        <movie-card
-          v-for="(film, index) in actorsFilm"
+      <div id="selectedFilm">
+        <div class="selectedFilmPicture">
+          <img
+            class="moviePict"
+            :src="`https://image.tmdb.org/t/p/w400/${selectedFilm.poster_path}`"
+            alt="picture"
+          />
+        </div>
+        <div class="selectedFilmDescribe">
+          <iframe
+            width="480"
+            height="320"
+            src="https://www.youtube.com/embed/ZwKhufmMxko"
+            frameborder="0"
+            allowfullscreen
+          ></iframe>
+
+          <p>{{ selectedFilm.overview }}</p>
+        </div>
+      </div>
+      <div id="filmFooter">
+        <p>
+          Add to favorite
+          <span class="badge badge-danger" @click="addFavorite(selectedFilm.id)"
+            >+</span
+          >
+        </p>
+        <p>
+          Seen/unseen
+          <span class="badge badge-success" @click="addToSeen(selectedFilm.id)"
+            >+</span
+          >
+        </p>
+        <p>
+          popularity:<span class="badge badge-warning">
+            {{ selectedFilm.popularity }}</span
+          >
+          release:
+          <span class="badge badge-warning"
+            >{{ selectedFilm.release_date }}
+          </span>
+          vote average:
+          <span class="badge badge-warning">{{
+            selectedFilm.vote_average
+          }}</span>
+          vote count:
+          <span class="badge badge-warning">{{ selectedFilm.vote_count }}</span>
+        </p>
+      </div>
+      <!-- Carousel d'artiste -->
+      <div class="actorList">
+        <div
+          v-for="(actor, index) in cast"
           :key="index"
-          :title="film.title"
-          :film="film"
-          :description="film.overview"
-          :vote="film.vote_average"
-          :path="film.poster_path"
-        ></movie-card>
+          @click="handleActor(actor.id)"
+        >
+          <img
+            class="photoActor"
+            :src="`https://image.tmdb.org/t/p/w200/${actor.profile_path}`"
+            alt="photo"
+          />
+          <h4>{{ actor.name }}</h4>
+          <p>popularity: {{ actor.popularity }}</p>
+        </div>
+      </div>
+      <div v-if="actorsFilm.length != 0" class="filmList">
+        <!-- Carousel de film -->
+        <div v-for="(film, index) in actorsFilm" :key="index" class="filmCard">
+          <!-- on vérifie la présence de photo pour le film -->
+          <img
+            v-if="film.poster_path"
+            class="photoFilm"
+            :src="`https://image.tmdb.org/t/p/w200/${film.poster_path}`"
+            alt="photo"
+            @click="handleActorsFilm(film)"
+          />
+          <div class="cardDescription">
+            <h5>{{ film.title }}</h5>
+            <p>{{ film.overview.slice(0, 100) }}</p>
+            <span>popularity: {{ film.popularity }}</span>
+            <span>vote average: {{ film.vote_average }}</span
+            ><span>vote count: {{ film.vote_count }}</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -45,10 +98,9 @@
 import { mapState } from "vuex";
 import axios from "axios";
 import Navbar from "./Navbar.vue";
-import MovieCard from "../components/MovieCard.vue";
 
 export default {
-  components: { Navbar, MovieCard },
+  components: { Navbar },
   name: "Film",
   data() {
     return {
@@ -64,9 +116,37 @@ export default {
       axios
         .get(`http://localhost:3050/api/movie/person/${actor}`)
         .then(async (response) => {
-          let result = await response.data.results.slice(0, 5);
+          let result = await response.data.results.slice(0, 6);
           console.log(this.$store);
           this.actorsFilm = result;
+        })
+        .catch((err) => console.log(err));
+    },
+    addFavorite(id) {
+      axios
+        .put(`http://localhost:3050/user/addfavorite`, {
+          email: "karasutan@gmail.com",
+          filmId: id,
+        })
+        .then((res) => console.log(res))
+        .catch((err) => err);
+    },
+    addToSeen(id) {
+      axios
+        .put(`http://localhost:3050/user/seen`, {
+          email: "karasutan@gmail.com",
+          filmId: id,
+        })
+        .then((res) => console.log(res))
+        .catch((err) => err);
+    },
+    handleActorsFilm(index) {
+      axios
+        .get(`http://localhost:3050/api/movie/${index.id}`)
+        .then(async (response) => {
+          let result = await response.data;
+          this.$store.dispatch("addFilm", result);
+          this.actorsFilm = [];
         })
         .catch((err) => console.log(err));
     },
@@ -81,10 +161,21 @@ export default {
       })
       .catch((err) => console.log(err));
   },
+  beforeUpdate() {
+    axios
+      .get(`http://localhost:3050/api/movie/credits/${this.selectedFilm.id}`)
+      .then(async (response) => {
+        let result = await response.data;
+        result = result.cast.slice(0, 5);
+        this.$store.dispatch("fetchCast", result);
+      })
+      .catch((err) => console.log(err));
+  },
 };
 </script>
 
 <style scoped>
+/* TODO faire un carousel */
 div {
   color: white;
 }
@@ -92,5 +183,84 @@ div {
 .photoActor {
   border-radius: 50%;
   width: 150px;
+}
+
+.filmFooter {
+  margin: 0;
+}
+
+.photoFilm {
+  width: 150px;
+}
+
+.actorList {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.filmList {
+  display: flex;
+  flex-direction: row;
+}
+
+.filmCard {
+  display: flex;
+  flex-direction: row;
+}
+
+.moviePict {
+  width: 85%;
+}
+
+#selectedFilm {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0 auto;
+  margin-bottom: 3rem;
+}
+
+.selectedFilmDescribe {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: space-between;
+  padding-left: 1rem;
+}
+
+.selectedFilmDescribe p {
+  width: 480px;
+  text-align: justify;
+}
+
+.cardDescription {
+  display: flex;
+  flex-direction: column;
+  transition: all ease-in-out 0.25s;
+  width: 0;
+  height: 250px;
+}
+
+.cardDescription h5,
+.cardDescription p,
+.cardDescription span {
+  transition: all ease-in-out 0.75s;
+  display: none;
+}
+
+.photoFilm:hover {
+  border: 3px solid #f4f4f4;
+}
+
+.photoFilm:hover ~ .cardDescription {
+  width: 300px;
+  height: 250px;
+}
+
+.photoFilm:hover ~ .cardDescription h5,
+.photoFilm:hover ~ .cardDescription p,
+.photoFilm:hover ~ .cardDescription span {
+  display: block;
 }
 </style>
