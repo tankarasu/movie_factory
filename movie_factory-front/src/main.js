@@ -9,6 +9,10 @@ import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 // Import Bootstrap an BootstrapVue CSS files (order is important)
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+// Import du composant slider
+import VueSplide from "@splidejs/vue-splide";
+
+Vue.use(VueSplide);
 
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue);

@@ -8,7 +8,9 @@
     <ul class="mainMenu">
       <li @click="getPopular()">home</li>
       <li>Communauté</li>
-      <li>{{ login.getLoggedUser.username }}</li>
+      <li>
+        {{ login.getLoggedUser.username }}
+      </li>
     </ul>
   </header>
 </template>
@@ -20,6 +22,11 @@ import { mapState } from "vuex";
 
 export default {
   components: { SearchBar },
+  data() {
+    return {
+      notLogged: "not logged",
+    };
+  },
   name: "NavBar",
   computed: { ...mapState(["login"]) },
   methods: {

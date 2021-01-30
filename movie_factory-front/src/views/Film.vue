@@ -70,9 +70,14 @@
           <p>popularity: {{ actor.popularity }}</p>
         </div>
       </div>
-      <div v-if="actorsFilm.length != 0" class="filmList">
+
+      <splide v-if="actorsFilm.length != 0" class="filmList" :options="options">
         <!-- Carousel de film -->
-        <div v-for="(film, index) in actorsFilm" :key="index" class="filmCard">
+        <splide-slide
+          v-for="(film, index) in actorsFilm"
+          :key="index"
+          class="filmCard"
+        >
           <!-- on vérifie la présence de photo pour le film -->
           <img
             v-if="film.poster_path"
@@ -88,8 +93,8 @@
             <span>vote average: {{ film.vote_average }}</span
             ><span>vote count: {{ film.vote_count }}</span>
           </div>
-        </div>
-      </div>
+        </splide-slide>
+      </splide>
     </div>
   </div>
 </template>
@@ -98,13 +103,22 @@
 import { mapState } from "vuex";
 import axios from "axios";
 import Navbar from "./Navbar.vue";
+// import des components du slider
+import { Splide, SplideSlide } from "@splidejs/vue-splide";
+// import css du slider
+import "@splidejs/splide/dist/css/themes/splide-default.min.css";
 
 export default {
-  components: { Navbar },
+  components: { Navbar, Splide, SplideSlide },
   name: "Film",
   data() {
     return {
       actorsFilm: [],
+      options: {
+        rewind: true,
+        width: 800,
+        gap: "1rem",
+      },
     };
   },
   computed: {
@@ -115,12 +129,12 @@ export default {
       console.log("Actor: ", actor);
       axios
         .get(`http://localhost:3050/api/movie/person/${actor}`)
-        .then(async (response) => {
+        .then(async response => {
           let result = await response.data.results.slice(0, 6);
           console.log(this.$store);
           this.actorsFilm = result;
         })
-        .catch((err) => console.log(err));
+        .catch(err => console.log(err));
     },
     addFavorite(id) {
       axios
@@ -128,8 +142,8 @@ export default {
           email: "karasutan@gmail.com",
           filmId: id,
         })
-        .then((res) => console.log(res))
-        .catch((err) => err);
+        .then(res => console.log(res))
+        .catch(err => err);
     },
     addToSeen(id) {
       axios
@@ -137,13 +151,13 @@ export default {
           email: "karasutan@gmail.com",
           filmId: id,
         })
-        .then((res) => console.log(res))
-        .catch((err) => err);
+        .then(res => console.log(res))
+        .catch(err => err);
     },
     handleActorsFilm(index) {
       axios
         .get(`http://localhost:3050/api/movie/${index.id}`)
-        .then(async (response) => {
+        .then(async response => {
           let result = await response.data;
           this.$store.dispatch("addFilm", result);
           this.actorsFilm = [];
@@ -152,7 +166,7 @@ export default {
             .get(
               `http://localhost:3050/api/movie/video/${this.selectedFilm.id}`
             )
-            .then(async (res) => {
+            .then(async res => {
               console.log("link:", res.data.results[0]);
               if (res.data.results[0].site == "YouTube") {
                 let path =
@@ -162,9 +176,9 @@ export default {
               } else {
               }
             })
-            .catch((err) => err);
+            .catch(err => err);
         })
-        .catch((err) => console.log(err));
+        .catch(err => console.log(err));
     },
   },
   beforeMount() {
@@ -174,12 +188,12 @@ export default {
     console.log("before update l158");
     axios
       .get(`http://localhost:3050/api/movie/credits/${this.selectedFilm.id}`)
-      .then(async (response) => {
+      .then(async response => {
         let result = await response.data;
         result = result.cast.slice(0, 5);
         this.$store.dispatch("fetchCast", result);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   },
   updated() {
     console.log("updated l169");
@@ -200,7 +214,7 @@ export default {
     console.log("mounted l184");
     axios
       .get(`http://localhost:3050/api/movie/video/${this.selectedFilm.id}`)
-      .then(async (res) => {
+      .then(async res => {
         console.log("link:", res.data.results[0]);
         if (res.data.results[0].site == "YouTube") {
           let path =
@@ -210,7 +224,7 @@ export default {
         } else {
         }
       })
-      .catch((err) => err);
+      .catch(err => err);
   },
 };
 </script>
@@ -230,7 +244,13 @@ div {
   margin: 0;
 }
 
+.splide {
+  left: 15%;
+  margin-bottom: 2rem;
+}
+
 .photoFilm {
+  margin-left: 175px;
   width: 150px;
 }
 
@@ -246,6 +266,8 @@ div {
 }
 
 .filmCard {
+  margin: 0 auto;
+  width: 500px;
   display: flex;
   flex-direction: row;
 }
@@ -282,31 +304,8 @@ div {
 .cardDescription {
   display: flex;
   flex-direction: column;
-  transition: all ease-in-out 0.25s;
-  width: 0;
-  height: 250px;
-  background: #111416ea;
-}
-
-.cardDescription h5,
-.cardDescription p,
-.cardDescription span {
-  transition: all ease-in-out 0.75s;
-  display: none;
-}
-
-.photoFilm:hover {
-  border: 3px solid #f4f4f4;
-}
-
-.photoFilm:hover ~ .cardDescription {
   width: 300px;
   height: 250px;
-}
-
-.photoFilm:hover ~ .cardDescription h5,
-.photoFilm:hover ~ .cardDescription p,
-.photoFilm:hover ~ .cardDescription span {
-  display: block;
+  background: #111416ea;
 }
 </style>
