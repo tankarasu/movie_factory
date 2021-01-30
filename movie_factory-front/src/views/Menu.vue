@@ -8,7 +8,7 @@
       href="#catFilm"
       data-toggle="collapse"
       aria-expanded="false"
-      class="dropdown-toggle"
+      class="dropdown-toggle leftFilter bg-secondary text-light"
     >
       Categories
     </button>
@@ -26,7 +26,7 @@
       href="#yearFilm"
       data-toggle="collapse"
       aria-expanded="false"
-      class="dropdown-toggle"
+      class="dropdown-toggle leftFilter bg-secondary text-light"
     >
       Year
     </button>
@@ -60,10 +60,18 @@ export default {
   color: aliceblue;
   background: #111416ea;
   height: 90vh;
+  overflow: hidden;
+  overflow-y: scroll;
 }
 
 .catMenu {
   text-align: left;
   list-style: none;
 }
+
+.leftFilter {
+  width: 100%;
+}
+
+
 </style>

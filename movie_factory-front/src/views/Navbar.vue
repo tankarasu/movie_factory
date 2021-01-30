@@ -5,7 +5,7 @@
       <h1>The Movie Factory</h1>
       <search-bar></search-bar>
     </div>
-    <ul class="mainMenu">
+    <ul class="mainMenu bg-dark">
       <li @click="getPopular()">home</li>
       <li>Communauté</li>
       <li>
@@ -68,10 +68,11 @@ h1 {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  background-color: #404244ea;
+  /* background-color: #404244ea; */
   width: 100%;
   margin-top: 1rem;
   margin-bottom: 1rem;
+  border-radius: 1rem;
 }
 
 .mainMenu li {
