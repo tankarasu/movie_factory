@@ -28,6 +28,9 @@ export default {
         .then(async (Response) => {
           let result = await Response.data;
           this.$store.dispatch("fetchPopularFilm", result);
+          if (this.$route.name != "home") {
+            this.$router.push("/home");
+          }
         })
         .catch((err) => console.log(err));
     },

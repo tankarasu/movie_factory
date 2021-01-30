@@ -8,7 +8,7 @@
     <ul class="mainMenu">
       <li @click="getPopular()">home</li>
       <li>Communauté</li>
-      <li>karasutan@gmail.com</li>
+      <li>{{ login.getLoggedUser.username }}</li>
     </ul>
   </header>
 </template>
@@ -16,10 +16,12 @@
 <script>
 import axios from "axios";
 import SearchBar from "../components/SearchBar.vue";
+import { mapState } from "vuex";
 
 export default {
   components: { SearchBar },
   name: "NavBar",
+  computed: { ...mapState(["login"]) },
   methods: {
     getPopular() {
       axios
