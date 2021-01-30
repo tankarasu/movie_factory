@@ -33,12 +33,14 @@ export default {
     getPopular() {
       axios
         .get("http://localhost:3050/api/movie/")
-        .then(async (response) => {
+        .then(async response => {
           let result = await response.data;
           this.$store.dispatch("fetchPopularFilm", result);
-          this.$router.push("/home");
+          if (this.$route.name != "home") {
+            this.$router.push("/home");
+          }
         })
-        .catch((err) => console.log(err));
+        .catch(err => console.log(err));
     },
   },
 };
