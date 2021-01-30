@@ -7,8 +7,8 @@
     </div>
     <ul class="mainMenu bg-dark">
       <li @click="getPopular()">home</li>
-      <li>Communauté</li>
-      <li>
+      <li @click="getCommunityPage()">Communauté</li>
+      <li @click="getProfilPage()">
         {{ login.getLoggedUser.username }}
       </li>
     </ul>
@@ -41,6 +41,16 @@ export default {
           }
         })
         .catch(err => console.log(err));
+    },
+    getProfilPage() {
+      if (this.$route.name != "profil") {
+        this.$router.push("/profil");
+      }
+    },
+    getCommunityPage() {
+      if (this.$route.name != "community") {
+        this.$router.push("/community");
+      }
     },
   },
 };

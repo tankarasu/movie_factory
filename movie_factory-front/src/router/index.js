@@ -4,7 +4,9 @@ import VueRouter from "vue-router";
 // import module pour les rendus de liens
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
-import Film from "../views/Film.vue"
+import Film from "../views/Film.vue";
+import ProfilPage from "../views/ProfilPage.vue";
+import CommunityPage from "../views/CommunityPage.vue";
 
 Vue.use(VueRouter);
 
@@ -23,8 +25,10 @@ const routes = [
   {
     path: "/film",
     name: "Film",
-    component:Film
+    component: Film,
   },
+  { path: "/profil", name: "profil", component: ProfilPage },
+  { path: "/community", name: "community", component: CommunityPage },
   // redirection si URL ne correspond à aucune citée
   {
     path: "/*",

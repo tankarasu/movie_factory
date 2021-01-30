@@ -47,6 +47,11 @@ export default new Vuex.Store({
   },
   // permet de commit les mutations
   actions: {
+    /**
+     * 
+     * @param {String} context 
+     * @param {String} payload 
+     */
     fetchUser(context, payload) {
       context.commit("selectUser", payload);
     },
