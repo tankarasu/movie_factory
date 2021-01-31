@@ -1,20 +1,25 @@
 <template>
     <div>
       <!-- if v-if boolean sent true, message envoi mail ok -->
-      <span class="text-success" v-if="sent">Message sent! Please check your inbox</span>
+      <p>{{ recipientEmail }}</p>
+      <span class="text-success" v-if="sent">Message sent to {{ recipientEmail }} ! Please check your inbox</span>
     </div>
 </template>
 
 <script>
-    export default{
+    export default {
       name: "MailerComponent",
+      components: {},
       props: ["recipientEmail"],
 
-      data:{
-        sent:"false",
+      data(){
+        return{
+          sent:false,
+        }
       },
 
       methods:{
+
         sendMail(){
           const {smtpEmail,smtpPassword,oAuthID,oAuthSecret,refreshToken } = process.env;
           //Création d'un objet transporter
@@ -31,7 +36,7 @@
           });  
             let mailOptions = {
             from: "tmfresetservice@gmail.com",
-            to: recipientEmail,
+            to: this.recipientEmail,
             subject: 'Nodemailer Project',
             text: 'Hi from your nodemailer project'
           };
@@ -45,6 +50,13 @@
           });
 
           }
+        },
+
+        beforeCreate() {
+          console.log(this.recipientEmail);
+          sendMail();
         }
+
+
       }
 </script>
