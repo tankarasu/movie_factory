@@ -89,6 +89,7 @@
           <div class="cardDescription">
             <h5>{{ film.title }}</h5>
             <p>{{ film.overview.slice(0, 100) }}</p>
+            <span>Runtime {{ filmSpec.runtime }} mn</span>
             <span>popularity: {{ film.popularity }}</span>
             <span>vote average: {{ film.vote_average }}</span
             ><span>vote count: {{ film.vote_count }}</span>
@@ -167,7 +168,6 @@ export default {
               `http://localhost:3050/api/movie/video/${this.selectedFilm.id}`
             )
             .then(async res => {
-              console.log("link:", res.data.results[0]);
               if (res.data.results[0].site == "YouTube") {
                 let path =
                   (await "https://www.youtube.com/embed/") +
@@ -190,10 +190,17 @@ export default {
       .get(`http://localhost:3050/api/movie/credits/${this.selectedFilm.id}`)
       .then(async response => {
         let result = await response.data;
+        console.log("result", result);
         result = result.cast.slice(0, 5);
         this.$store.dispatch("fetchCast", result);
       })
       .catch(err => console.log(err));
+    axios
+      .get(`http://localhost:3050/api/movie/spec/${this.selectedFilm.id}`)
+      .then(async response => {
+        let result = await response.data;
+        this.$store.dispatch("fetchFilmSpec", result);
+      });
   },
   updated() {
     console.log("updated l169");

@@ -7,7 +7,7 @@
     </div>
     <ul class="mainMenu bg-dark">
       <li @click="getPopular()">home</li>
-      <li @click="getCommunityPage()">Communauté</li>
+      <li @click="getCommunityPage()">Community</li>
       <li @click="getProfilPage()">
         {{ login.getLoggedUser.username }}
       </li>

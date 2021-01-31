@@ -89,6 +89,7 @@
             >
               Reset
             </button>
+            <button @click.prevent="handleTest()">TEST</button>
             <button
               v-if="signup"
               type="submit"
@@ -156,6 +157,13 @@ export default {
   },
   // regroupe les methodes du composants
   methods: {
+    handleTest() {
+      this.$store.dispatch("fetchUser", {
+        email: this.email,
+        password: this.password,
+        router: this.$router,
+      });
+    },
     handleClick() {
       // TODO modulariser si possible
       let log = this.login.getLoginURL;
@@ -198,29 +206,11 @@ export default {
         }, 2500);
         return;
       }
-      let userData = {};
-      axios
-        .post(this.login.getLoginURL, {
-          email: this.email,
-          password: this.password,
-        })
-        // arrow function car elle bind le this
-        .then(async (response) => {
-          // extraction du token par destructuration
-          let { token } = await response.data;
-          // mise en forme du payload
-          var base64Payload = token.split(".")[1];
-          // transformation du payload en buffer
-          var payload = Buffer.from(base64Payload, "base64");
-          // parsing du buffer en json
-          let result = JSON.parse(payload.toString());
-          this.$store.dispatch("fetchUser", result);
-          this.goHome();
-        })
-        .catch(() => this.declinePassword());
-    },
-    goHome() {
-      this.$router.push("/home");
+      this.$store.dispatch("fetchUser", {
+        email: this.email,
+        password: this.password,
+        router: this.$router,
+      });
     },
     resetPassword() {
       this.reset = true;
