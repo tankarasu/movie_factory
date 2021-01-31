@@ -1,13 +1,18 @@
 <template>
     <div>
-
+      <!-- if v-if boolean sent true, message envoi mail ok -->
+      <span class="text-success" v-if="sent">Message sent! Please check your inbox</span>
     </div>
 </template>
 
 <script>
-    import {SMTPClient} from 'smtp-client';
     export default{
+      name: "MailerComponent",
       props: ["recipientEmail"],
+
+      data:{
+        sent:"false",
+      },
 
       methods:{
         sendMail(){
@@ -31,24 +36,15 @@
             text: 'Hi from your nodemailer project'
           };
           transporter.sendMail(mailOptions, function(err, data) {
-          if (err) {
-            console.log("Error " + err);
-          } else {
-            console.log("Email sent successfully");
-          }
-    });
-
-
+            if (err) {
+              console.log("Error " + err);
+            } else {
+              console.log("Email sent successfully");
+              sent=true;
+            }
+          });
 
           }
         }
       }
-
-      methods:{
-
-      }
-
-
-        
-    }
 </script>

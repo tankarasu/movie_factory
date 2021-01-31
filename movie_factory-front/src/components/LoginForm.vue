@@ -41,15 +41,6 @@
           <span id="messageServeur" class="text-warning">{{
             serveurMessage
           }}</span>
-          <!-- 3 spans reset forgot signup -->
-          <div class="reset">
-            <span @click="forgotPassword()">forgot </span>|<span
-              @click="resetPassword()"
-            >
-              reset </span
-            >|<span @click="handleSignup()"> sign up</span>
-          </div>
-
           <!-- affichage conditionnel des boutons -->
           <div class="boutons">
             <!-- prevent previent le rechargement -->
@@ -71,6 +62,7 @@
             >
               Cancel
             </button>
+            <!-- info récup MDP 
             <button
               v-if="forgot"
               type="submit"
@@ -88,7 +80,7 @@
               @keyup.enter="handleClick()"
             >
               Reset
-            </button>
+            </button>-->
             <button
               v-if="signup"
               type="submit"
@@ -97,6 +89,18 @@
               @keyup.enter="signups()"
             >
               Sign Up
+            </button>
+          </div>
+          <div class="reset d-flex justify-content-center">
+            <!-- 
+            <span @click="forgotPassword()">forgot </span>|<span
+              @click="resetPassword()"
+            >
+              reset </span
+            >|-->
+            <button class="btn" @click="handleSignup()"> Not registered yet</button>
+            <button type="button" class="btn" data-toggle="modal" data-target="#staticBackdrop">
+              Forgot password
             </button>
           </div>
         </form>
@@ -118,6 +122,34 @@
         </div>
       </div>
     </div>
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Forgot password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body d-flex justify-content-center">
+            <input type="text" v-model="recipientEmail" placeholder="regis@mail.fr" required/>
+      </div>
+      <div v-if="recipientEmail">
+        <mailer-compononent :recipientEmail="recipientEmail"></mailer-compononent>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button
+        type="submit"
+        class="btn btn-outline-danger"
+        @click.prevent="handleForgot()"
+        @keyup.enter="handleForgot()"
+      >Send reset email</button>
+      </div>
+    </div>
+  </div>
+</div>
   </div>
 </template>
 
@@ -130,8 +162,10 @@ import axios from "axios";
 import { mapState } from "vuex";
 
 import LoginVue from "../views/Login.vue";
+import MailerComponent from "./Mailer.vue";
 
 export default {
+  components:{ MailerComponent },
   name: "LoginForm",
   props: {},
   data() {
@@ -141,6 +175,7 @@ export default {
       signup: false,
       username: "",
       email: "",
+      recipientEmail: "",
       newPassword: "",
       password: "",
       serveurMessage: "",
@@ -162,6 +197,9 @@ export default {
         password: this.password,
         router: this.$router,
       });
+    },
+    handleForgot(){
+      recipientEmail: this.recipientEmail;
     },
     handleClick() {
       // TODO modulariser si possible
@@ -218,6 +256,9 @@ export default {
       this.signup = false;
     },
     forgotPassword() {
+      $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').trigger('focus')
+      })
       this.forgot = true;
       this.signup = false;
       this.reset = false;
@@ -271,8 +312,10 @@ export default {
 </script>
 
 <style scoped>
+
 .logo {
   width: 100%;
+  margin-bottom: 1rem;
 }
 
 .login-box {
@@ -308,7 +351,8 @@ export default {
 
 .log {
   display: flex;
-  margin-top: 40px;
+  margin-top: 20px;
+  margin-bottom: 10px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -345,7 +389,6 @@ input[type="password"] {
 }
 
 .form-group {
-  margin-bottom: 40px;
   outline: 0px;
 }
 
@@ -474,7 +517,7 @@ blockquote {
 
 .reset {
   color: #6c6c6c;
-  margin-bottom: 1rem;
+  margin-top: 2rem;
 }
 
 .reset span:hover {
