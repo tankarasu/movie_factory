@@ -89,7 +89,6 @@
             >
               Reset
             </button>
-            <button @click.prevent="handleTest()">TEST</button>
             <button
               v-if="signup"
               type="submit"
@@ -206,6 +205,7 @@ export default {
         }, 2500);
         return;
       }
+      // le store gère le password
       this.$store.dispatch("fetchUser", {
         email: this.email,
         password: this.password,

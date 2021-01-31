@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="profilComponent">
     <h5>{{ this.name }}</h5>
-    <p>number of favorite</p>
-    <p>number of seen</p>
+    <p>favorite: {{ this.favoriteCount.length }}</p>
+    <p>seen: {{ this.seen.length }}</p>
     <p>Favorite Films</p>
     <p>Seen Films</p>
     <p>total durée film vue</p>
@@ -11,9 +11,16 @@
 
 <script>
 export default {
-    name:"profilComponent",
-    props:["name"]
-}
+  name: "profilComponent",
+  props: ["name", "favoriteCount", "seen"],
+};
 </script>
 
-<style scoped></style>
+<style scoped>
+.profilComponent {
+  background: #111416ea;
+  width: 200px;
+  color: aliceblue;
+  border-radius: 1rem;
+}
+</style>

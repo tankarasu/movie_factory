@@ -5,7 +5,11 @@
       Welcome {{ login.getLoggedUser.username.toUpperCase() }} on your Profil
       Page
     </h2>
-    <profil-component :name="login.getLoggedUser.username"></profil-component>
+    <profil-component
+      :name="login.getLoggedUser.username"
+      :favoriteCount="login.getLoggedUser.favorite"
+      :seen="login.getLoggedUser.seen"
+    ></profil-component>
   </div>
 </template>
 

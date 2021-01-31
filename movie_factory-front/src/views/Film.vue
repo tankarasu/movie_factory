@@ -16,9 +16,10 @@
 
         <div class="selectedFilmDescribe">
           <iframe
+            v-if="selectedFilm.results[0].key"
             width="480"
             height="320"
-            :src="$store.state.videoPath"
+            :src="$data.youtubePath + selectedFilm.results[0].key"
             frameborder="0"
             allowfullscreen
           ></iframe>
@@ -29,12 +30,12 @@
       <div id="filmFooter">
         <p>
           Add to favorite
-          <span class="badge badge-danger" @click="addFavorite(selectedFilm.id)"
+          <span class="badge badge-danger" @click="addFavorite(selectedFilm)"
             >+</span
           >
 
           Seen/unseen
-          <span class="badge badge-success" @click="addToSeen(selectedFilm.id)"
+          <span class="badge badge-success" @click="addToSeen(selectedFilm)"
             >+</span
           >
         </p>
@@ -57,7 +58,7 @@
       <!-- Carousel d'artiste -->
       <div class="actorList">
         <div
-          v-for="(actor, index) in cast"
+          v-for="(actor, index) in selectedFilm.cast"
           :key="index"
           @click="handleActor(actor.id)"
         >
@@ -71,7 +72,7 @@
         </div>
       </div>
 
-      <splide v-if="actorsFilm.length != 0" class="filmList" :options="options">
+      <splide v-if="actorsFilm.length" class="filmList" :options="options">
         <!-- Carousel de film -->
         <splide-slide
           v-for="(film, index) in actorsFilm"
@@ -89,7 +90,7 @@
           <div class="cardDescription">
             <h5>{{ film.title }}</h5>
             <p>{{ film.overview.slice(0, 100) }}</p>
-            <span>Runtime {{ filmSpec.runtime }} mn</span>
+            <span>Runtime {{ selectedFilm.runtime }} mn</span>
             <span>popularity: {{ film.popularity }}</span>
             <span>vote average: {{ film.vote_average }}</span
             ><span>vote count: {{ film.vote_count }}</span>
@@ -120,6 +121,7 @@ export default {
         width: 800,
         gap: "1rem",
       },
+      youtubePath: "https://www.youtube.com/embed/",
     };
   },
   computed: {
@@ -130,55 +132,55 @@ export default {
       console.log("Actor: ", actor);
       axios
         .get(`http://localhost:3050/api/movie/person/${actor}`)
-        .then(async response => {
+        .then(async (response) => {
           let result = await response.data.results.slice(0, 6);
-          console.log(this.$store);
+          console.log(result);
           this.actorsFilm = result;
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     },
-    addFavorite(id) {
+    addFavorite(film) {
       axios
         .put(`http://localhost:3050/user/addfavorite`, {
           email: "karasutan@gmail.com",
-          filmId: id,
+          filmId: film,
         })
-        .then(res => console.log(res))
-        .catch(err => err);
+        .then((res) => console.log(res))
+        .catch((err) => err);
     },
-    addToSeen(id) {
+    addToSeen(film) {
       axios
         .put(`http://localhost:3050/user/seen`, {
           email: "karasutan@gmail.com",
-          filmId: id,
+          filmId: film,
         })
-        .then(res => console.log(res))
-        .catch(err => err);
+        .then((res) => console.log(res))
+        .catch((err) => err);
     },
     handleActorsFilm(index) {
       axios
         .get(`http://localhost:3050/api/movie/${index.id}`)
-        .then(async response => {
+        .then(async (response) => {
           let result = await response.data;
           this.$store.dispatch("addFilm", result);
           this.actorsFilm = [];
 
-          axios
-            .get(
-              `http://localhost:3050/api/movie/video/${this.selectedFilm.id}`
-            )
-            .then(async res => {
-              if (res.data.results[0].site == "YouTube") {
-                let path =
-                  (await "https://www.youtube.com/embed/") +
-                  (await res.data.results[0].key);
-                this.$store.dispatch("fetchVideoPath", path);
-              } else {
-              }
-            })
-            .catch(err => err);
+          // axios
+          //   .get(
+          //     `http://localhost:3050/api/movie/video/${this.selectedFilm.id}`
+          //   )
+          //   .then(async (res) => {
+          //     if (res.data.results[0].site == "YouTube") {
+          //       let path =
+          //         (await "https://www.youtube.com/embed/") +
+          //         (await res.data.results[0].key);
+          //       this.$store.dispatch("fetchVideoPath", path);
+          //     } else {
+          //     }
+          //   })
+          //   .catch((err) => err);
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     },
   },
   beforeMount() {
@@ -186,21 +188,21 @@ export default {
   },
   beforeUpdate() {
     console.log("before update l158");
-    axios
-      .get(`http://localhost:3050/api/movie/credits/${this.selectedFilm.id}`)
-      .then(async response => {
-        let result = await response.data;
-        console.log("result", result);
-        result = result.cast.slice(0, 5);
-        this.$store.dispatch("fetchCast", result);
-      })
-      .catch(err => console.log(err));
-    axios
-      .get(`http://localhost:3050/api/movie/spec/${this.selectedFilm.id}`)
-      .then(async response => {
-        let result = await response.data;
-        this.$store.dispatch("fetchFilmSpec", result);
-      });
+    // axios
+    //   .get(`http://localhost:3050/api/movie/credits/${this.selectedFilm.id}`)
+    //   .then(async response => {
+    //     let result = await response.data;
+    //     console.log("result", result);
+    //     result = result.cast.slice(0, 5);
+    //     this.$store.dispatch("fetchCast", result);
+    //   })
+    //   .catch(err => console.log(err));
+    // axios
+    //   .get(`http://localhost:3050/api/movie/spec/${this.selectedFilm.id}`)
+    //   .then(async response => {
+    //     let result = await response.data;
+    //     this.$store.dispatch("fetchFilmSpec", result);
+    //   });
   },
   updated() {
     console.log("updated l169");
@@ -219,25 +221,24 @@ export default {
   },
   mounted() {
     console.log("mounted l184");
-    axios
-      .get(`http://localhost:3050/api/movie/video/${this.selectedFilm.id}`)
-      .then(async res => {
-        console.log("link:", res.data.results[0]);
-        if (res.data.results[0].site == "YouTube") {
-          let path =
-            (await "https://www.youtube.com/embed/") +
-            (await res.data.results[0].key);
-          this.$store.dispatch("fetchVideoPath", path);
-        } else {
-        }
-      })
-      .catch(err => err);
+    // axios
+    //   .get(`http://localhost:3050/api/movie/video/${this.selectedFilm.id}`)
+    //   .then(async res => {
+
+    //   if (res.data.results[0].site == "YouTube") {
+    //     let path =
+    //       (await "https://www.youtube.com/embed/") +
+    //       (await res.data.results[0].key);
+
+    //   } else {
+    //   }
+    // })
+    //   .catch(err => err);
   },
 };
 </script>
 
 <style scoped>
-/* TODO faire un carousel */
 div {
   color: white;
 }
