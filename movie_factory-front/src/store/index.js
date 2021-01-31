@@ -10,17 +10,17 @@ export default new Vuex.Store({
   // l'état (state) de l'application à un instant T
   state: {
     apiBaseURL: "https://localhost/api/movie",
-    cast: [],
+    cast: [], // TODO is necessary ?
     selectedFilm: {},
-    selectedFilmRuntime: 0,
     selectedActor: {}, // mettre les films de l'acteur
     // dispatch au moment selection acteur => récupérer film actor et mettre tableau
     // selectActor => dispatch va chercher infos
-    videoPath: "",
+    videoPath: "", // TODO is necessary ?s
     filmSpec: {},
     login: {
       getLoginURL: "http://localhost:3050/user/login",
       getLoggedUser: {},
+      getFavorite: [],
     },
     popularFilm: [],
     categories: [],
@@ -34,6 +34,7 @@ export default new Vuex.Store({
   mutations: {
     selectUser(state, payload) {
       state.login.getLoggedUser = payload.data;
+      state.login.getFavorite = payload.data.favorite;
     },
     addPopularFilm(state, payload) {
       state.popularFilm = payload;
@@ -52,6 +53,10 @@ export default new Vuex.Store({
     },
     addFilmSpec(state, payload) {
       state.filmSpec = payload;
+    },
+    addToFavorite(state, payload) {
+      console.log("addToFavorite");
+      state.login.getFavorite.push(payload);
     },
   },
   /**
@@ -101,6 +106,7 @@ export default new Vuex.Store({
      */
     addFilm(context, payload) {
       // on va récupérer les infos du film via un appel axios
+      // on va ajouter le film à selectedFilm
       axios
         .get(`http://localhost:3050/api/movie/spec/${payload.id}`)
         .then(async res => {

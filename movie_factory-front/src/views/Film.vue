@@ -125,7 +125,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["selectedFilm", "cast"]),
+    ...mapState(["selectedFilm", "login"]),
   },
   methods: {
     handleActor(actor) {
@@ -139,14 +139,33 @@ export default {
         })
         .catch((err) => console.log(err));
     },
+    /**
+     * prends un film et l'ajoute dans un tableau contenant tous les films favoris
+     * @param {Object} film à ajouter aux favoris
+     */
     addFavorite(film) {
-      axios
-        .put(`http://localhost:3050/user/addfavorite`, {
-          email: "karasutan@gmail.com",
-          filmId: film,
-        })
-        .then((res) => console.log(res))
-        .catch((err) => err);
+      let { getFavorite } = this.$store.state.login;
+
+      let isFavorite = true;
+
+      for (let index = 0; index < getFavorite.length; index++) {
+        const element = getFavorite[index];
+        if (element.id == film.id) {
+          isFavorite = false;
+          return;
+        }
+      }
+      // ajout du film aux favoris du User
+      if (isFavorite) {
+        this.$store.commit("addToFavorite", film);
+        axios
+          .put(`http://localhost:3050/user/addfavorite`, {
+            email: this.login.getLoggedUser.email,
+            filmId: film,
+          })
+          .then((res) => console.log("film ligne 164", res))
+          .catch((err) => err);
+      }
     },
     addToSeen(film) {
       axios
