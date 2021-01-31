@@ -162,9 +162,8 @@ export default {
           filmId: film,
         });
       }
-      console.log(isFavorite);
+
       if (isFavorite) {
-        console.log("here");
         this.$store.commit("removeFavorite", film);
         axios.put(`http://localhost:3050/user/removefavorite`, {
           email: this.login.getLoggedUser.email,
@@ -173,13 +172,32 @@ export default {
       }
     },
     addToSeen(film) {
-      axios
-        .put(`http://localhost:3050/user/seen`, {
-          email: "karasutan@gmail.com",
+      let { getSeen } = this.$store.state.login;
+
+      let isSeen = false;
+
+      for (let index = 0; index < getSeen.length; index++) {
+        const element = getSeen[index];
+        if (element.id == film.id) {
+          isSeen = true;
+        }
+      }
+      // ajout du film aux favoris du User
+      if (!isSeen) {
+        this.$store.commit("addToSeen", film);
+        axios.put(`http://localhost:3050/user/seen`, {
+          email: this.login.getLoggedUser.email,
           filmId: film,
-        })
-        .then((res) => console.log(res))
-        .catch((err) => err);
+        });
+      }
+
+      if (isSeen) {
+        this.$store.commit("removeSeen", film);
+        axios.put(`http://localhost:3050/user/removeseen`, {
+          email: this.login.getLoggedUser.email,
+          filmId: film,
+        });
+      }
     },
     handleActorsFilm(index) {
       axios

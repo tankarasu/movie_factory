@@ -21,6 +21,7 @@ export default new Vuex.Store({
       getLoginURL: "http://localhost:3050/user/login",
       getLoggedUser: {},
       getFavorite: [],
+      getSeen: [],
     },
     popularFilm: [],
     categories: [],
@@ -55,18 +56,26 @@ export default new Vuex.Store({
       state.filmSpec = payload;
     },
     addToFavorite(state, payload) {
-      console.log("addToFavorite");
       state.login.getFavorite.push(payload);
     },
     removeFavorite(state, payload) {
       let { id } = payload;
-      console.log("removeFavorite");
-      console.log(payload);
-      console.log(state.login.getFavorite);
       for (let i = 0; i < state.login.getFavorite.length; i++) {
         if (state.login.getFavorite[i].id == id) {
           console.log(state.login);
           state.login.getFavorite.splice(i, 1);
+        }
+      }
+    },
+    addToSeen(state, payload) {
+      state.login.getSeen.push(payload);
+    },
+    removeSeen(state, payload) {
+      let { id } = payload;
+      for (let i = 0; i < state.login.getSeen.length; i++) {
+        if (state.login.getSeen[i].id == id) {
+          console.log(state.login);
+          state.login.getSeen.splice(i, 1);
         }
       }
     },
