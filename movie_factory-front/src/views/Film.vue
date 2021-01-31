@@ -24,7 +24,7 @@
             allowfullscreen
           ></iframe>
 
-          <p>{{ selectedFilm.overview }}</p>
+          <p>{{ selectedFilm.overview }} $</p>
         </div>
       </div>
       <div id="filmFooter">
@@ -38,6 +38,30 @@
           <span class="badge badge-success" @click="addToSeen(selectedFilm)"
             >+</span
           >
+        </p>
+
+        <p>
+          Gain:
+          <span class="badge badge-info">
+            {{
+              new Intl.NumberFormat("de-DE", {
+                style: "currency",
+                currency: "USD",
+                maximumSignificantDigits: 1,
+              }).format(selectedFilm.revenue - selectedFilm.budget)
+            }}
+          </span>
+          Runtime:<span class="badge badge-info">
+            {{ selectedFilm.runtime }}</span
+          >mn
+        </p>
+        <p>
+          <span v-for="(genre, index) in selectedFilm.genres" :key="index">
+            -{{ genre.name }}-
+          </span>
+        </p>
+        <p v-if="selectedFilm.homepage">
+          <a :href="selectedFilm.homepage">Official Home Page</a>
         </p>
         <p>
           popularity:<span class="badge badge-warning">
