@@ -146,25 +146,30 @@ export default {
     addFavorite(film) {
       let { getFavorite } = this.$store.state.login;
 
-      let isFavorite = true;
+      let isFavorite = false;
 
       for (let index = 0; index < getFavorite.length; index++) {
         const element = getFavorite[index];
         if (element.id == film.id) {
-          isFavorite = false;
-          return;
+          isFavorite = true;
         }
       }
       // ajout du film aux favoris du User
-      if (isFavorite) {
+      if (!isFavorite) {
         this.$store.commit("addToFavorite", film);
-        axios
-          .put(`http://localhost:3050/user/addfavorite`, {
-            email: this.login.getLoggedUser.email,
-            filmId: film,
-          })
-          .then((res) => console.log("film ligne 164", res))
-          .catch((err) => err);
+        axios.put(`http://localhost:3050/user/addfavorite`, {
+          email: this.login.getLoggedUser.email,
+          filmId: film,
+        });
+      }
+      console.log(isFavorite);
+      if (isFavorite) {
+        console.log("here");
+        this.$store.commit("removeFavorite", film);
+        axios.put(`http://localhost:3050/user/removefavorite`, {
+          email: this.login.getLoggedUser.email,
+          filmId: film,
+        });
       }
     },
     addToSeen(film) {
@@ -183,76 +188,9 @@ export default {
           let result = await response.data;
           this.$store.dispatch("addFilm", result);
           this.actorsFilm = [];
-
-          // axios
-          //   .get(
-          //     `http://localhost:3050/api/movie/video/${this.selectedFilm.id}`
-          //   )
-          //   .then(async (res) => {
-          //     if (res.data.results[0].site == "YouTube") {
-          //       let path =
-          //         (await "https://www.youtube.com/embed/") +
-          //         (await res.data.results[0].key);
-          //       this.$store.dispatch("fetchVideoPath", path);
-          //     } else {
-          //     }
-          //   })
-          //   .catch((err) => err);
         })
         .catch((err) => console.log(err));
     },
-  },
-  beforeMount() {
-    console.log("before Mount l155");
-  },
-  beforeUpdate() {
-    console.log("before update l158");
-    // axios
-    //   .get(`http://localhost:3050/api/movie/credits/${this.selectedFilm.id}`)
-    //   .then(async response => {
-    //     let result = await response.data;
-    //     console.log("result", result);
-    //     result = result.cast.slice(0, 5);
-    //     this.$store.dispatch("fetchCast", result);
-    //   })
-    //   .catch(err => console.log(err));
-    // axios
-    //   .get(`http://localhost:3050/api/movie/spec/${this.selectedFilm.id}`)
-    //   .then(async response => {
-    //     let result = await response.data;
-    //     this.$store.dispatch("fetchFilmSpec", result);
-    //   });
-  },
-  updated() {
-    console.log("updated l169");
-  },
-  created() {
-    console.log("created l172");
-  },
-  beforeCreate() {
-    console.log("before create l175");
-  },
-  beforeDestroy() {
-    console.log("before destroy l178");
-  },
-  destroyed() {
-    console.log("destroyed l181");
-  },
-  mounted() {
-    console.log("mounted l184");
-    // axios
-    //   .get(`http://localhost:3050/api/movie/video/${this.selectedFilm.id}`)
-    //   .then(async res => {
-
-    //   if (res.data.results[0].site == "YouTube") {
-    //     let path =
-    //       (await "https://www.youtube.com/embed/") +
-    //       (await res.data.results[0].key);
-
-    //   } else {
-    //   }
-    // })
-    //   .catch(err => err);
   },
 };
 </script>
