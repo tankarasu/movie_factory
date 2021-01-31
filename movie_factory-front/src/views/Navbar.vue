@@ -1,14 +1,16 @@
 <template>
-  <header class="navMenu container">
+  <header class="navMenu container sticky-top">
     <div class="headerTitle">
       <img src="../assets/homeLogo.png" alt="logo" id="logo" />
       <h1>The Movie Factory</h1>
       <search-bar></search-bar>
     </div>
-    <ul class="mainMenu">
+    <ul class="mainMenu bg-dark">
       <li @click="getPopular()">home</li>
-      <li>Communauté</li>
-      <li>karasutan@gmail.com</li>
+      <li @click="getCommunityPage()">Community</li>
+      <li @click="getProfilPage()">
+        {{ login.getLoggedUser.username }}
+      </li>
     </ul>
   </header>
 </template>
@@ -16,20 +18,39 @@
 <script>
 import axios from "axios";
 import SearchBar from "../components/SearchBar.vue";
+import { mapState } from "vuex";
 
 export default {
   components: { SearchBar },
+  data() {
+    return {
+      notLogged: "not logged",
+    };
+  },
   name: "NavBar",
+  computed: { ...mapState(["login"]) },
   methods: {
     getPopular() {
       axios
         .get("http://localhost:3050/api/movie/")
-        .then(async (response) => {
+        .then(async response => {
           let result = await response.data;
           this.$store.dispatch("fetchPopularFilm", result);
-          this.$router.push("/home");
+          if (this.$route.name != "home") {
+            this.$router.push("/home");
+          }
         })
-        .catch((err) => console.log(err));
+        .catch(err => console.log(err));
+    },
+    getProfilPage() {
+      if (this.$route.name != "profil") {
+        this.$router.push("/profil");
+      }
+    },
+    getCommunityPage() {
+      if (this.$route.name != "community") {
+        this.$router.push("/community");
+      }
     },
   },
 };
@@ -59,10 +80,11 @@ h1 {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  background-color: #404244ea;
+  /* background-color: #404244ea; */
   width: 100%;
   margin-top: 1rem;
   margin-bottom: 1rem;
+  border-radius: 1rem;
 }
 
 .mainMenu li {

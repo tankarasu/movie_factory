@@ -2,6 +2,7 @@
   <div class="row p-1 m-0 movieCard" @click="selectFilm(film)">
     <div class="col-4 p-0">
       <img
+        v-if="path"
         class="moviePict"
         :src="`https://image.tmdb.org/t/p/w200/${path}`"
         alt="picture"
