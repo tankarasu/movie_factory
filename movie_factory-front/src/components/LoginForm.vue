@@ -125,17 +125,19 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import axios from "axios";
+import { functions } from "../assets/functions";
 
 // import de la methode qui nous donnera le store
 import { mapState } from "vuex";
-
-import LoginVue from "../views/Login.vue";
 
 export default {
   name: "LoginForm",
   props: {},
   data() {
     return {
+      isEmailEmpty: true,
+      isEmailValid: false,
+      isPasswordEmpty: true,
       forgot: false,
       reset: false,
       signup: false,
@@ -156,55 +158,21 @@ export default {
   },
   // regroupe les methodes du composants
   methods: {
-    handleTest() {
-      this.$store.dispatch("fetchUser", {
-        email: this.email,
-        password: this.password,
-        router: this.$router,
-      });
-    },
     handleClick() {
-      // TODO modulariser si possible
       let log = this.login.getLoginURL;
-      // gestion des erreurs
-      const mailRegex = new RegExp(
-        "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+[.][a-zA-Z0-9-.]+$"
-      );
 
       // email vide
-      if (this.email.trim() === "") {
-        this.emailColor = "red";
-        this.labelEmail = "Veuillez renseigner une adresse email";
-        setTimeout(() => {
-          this.labelEmail = "Email";
-          this.emailColor = "#6c6c6c";
-          this.email = "";
-        }, 2500);
-        return;
-      }
+      this.checkIsEmailEmpty(this.email);
+      if (this.isEmailEmpty) return;
 
       // email non valide
-      if (!mailRegex.test(this.email)) {
-        this.emailColor = "red";
-        this.labelEmail = "Veuillez renseigner une adresse email valide";
-        setTimeout(() => {
-          this.labelEmail = "Email";
-          this.emailColor = "#6c6c6c";
-          this.email = "";
-        }, 2500);
-        return;
-      }
+      this.checkIsEmailValid(this.email);
+      if (!this.isEmailValid) return;
+
       // password vide
-      if (this.password.trim() === "") {
-        this.passwordColor = "red";
-        this.labelPassword = "Veuillez renseigner un mot de passe";
-        setTimeout(() => {
-          this.labelPassword = "Password";
-          this.passwordColor = "#6c6c6c";
-          this.password = "";
-        }, 2500);
-        return;
-      }
+      this.checkIsPasswordEmpty(this.password);
+      if (this.isPasswordEmpty) return;
+
       // le store gère le password
       this.$store.dispatch("fetchUser", {
         email: this.email,
@@ -216,11 +184,27 @@ export default {
       this.reset = true;
       this.forgot = false;
       this.signup = false;
+
+      // email vide
+      this.checkIsEmailEmpty(this.email);
+      if (this.isEmailEmpty) return;
+
+      // email non valide
+      this.checkIsEmailValid(this.email);
+      if (!this.isEmailValid) return;
     },
     forgotPassword() {
       this.forgot = true;
       this.signup = false;
       this.reset = false;
+
+      // email vide
+      this.checkIsEmailEmpty(this.email);
+      if (this.isEmailEmpty) return;
+
+      // email non valide
+      this.checkIsEmailValid(this.email);
+      if (!this.isEmailValid) return;
     },
     handleSignup() {
       this.signup = true;
@@ -228,6 +212,19 @@ export default {
       this.forgot = false;
     },
     signups() {
+      // email vide
+      this.checkIsEmailEmpty(this.email);
+      if (this.isEmailEmpty) return;
+
+      // email non valide
+      this.checkIsEmailValid(this.email);
+      if (!this.isEmailValid) return;
+      // username vide
+      // email existe déja
+      // password vide
+      this.checkIsPasswordEmpty(this.password);
+      if (this.isPasswordEmpty) return;
+
       axios
         .post("http://localhost:3050/user/signup", {
           email: this.email,
@@ -243,6 +240,14 @@ export default {
         .catch((err) => console.log(err));
     },
     sendMail() {
+      // email vide
+      this.checkIsEmailEmpty(this.email);
+      if (this.isEmailEmpty) return;
+
+      // email non valide
+      this.checkIsEmailValid(this.email);
+      if (!this.isEmailValid) return;
+
       this.serveurMessage = "Un email de réinitialisation vient d'être envoyé";
       setTimeout(() => {
         this.serveurMessage = "";
@@ -266,11 +271,60 @@ export default {
       }, 2500);
       return;
     },
+    /**
+     * Verification de la présence d'un email
+     * @param {String} -- email de l'utilisateur entrée dans le input
+     */
+    checkIsEmailEmpty(email) {
+      if (email.trim() === "") {
+        this.emailColor = "red";
+        this.labelEmail = "Veuillez renseigner une adresse email svp";
+        setTimeout(() => {
+          this.labelEmail = "Email";
+          this.emailColor = "#6c6c6c";
+          this.email = "";
+        }, 2500);
+      } else {
+        this.isEmailEmpty = false;
+      }
+    },
+    /**
+     * Vérification de la validité de l'adress mail
+     * @param {String} -- email de l'utilisateur entrée dans le input
+     */
+    checkIsEmailValid(email) {
+      const mailRegex = new RegExp(
+        "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+[.][a-zA-Z0-9-.]+$"
+      );
+      if (!mailRegex.test(email)) {
+        this.emailColor = "red";
+        this.labelEmail = "Veuillez renseigner une adresse email valide";
+        setTimeout(() => {
+          this.labelEmail = "Email";
+          this.emailColor = "#6c6c6c";
+          this.email = "";
+        }, 2500);
+      } else {
+        this.isEmailValid = true;
+      }
+    },
+    checkIsPasswordEmpty(password) {
+      if (password.trim() === "") {
+        this.passwordColor = "red";
+        this.labelPassword = "Veuillez renseigner un mot de passe";
+        setTimeout(() => {
+          this.labelPassword = "Password";
+          this.passwordColor = "#6c6c6c";
+          password = "";
+        }, 2500);
+      } else {
+        this.isPasswordEmpty = false;
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
-@import './libs/Loginform.css';
-
+@import "./libs/Loginform.css";
 </style>

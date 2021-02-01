@@ -26,9 +26,6 @@ export default {
     ...mapState(["popularFilm"]),
   },
   methods: {
-    console() {
-      console.log("movie console");
-    },
   },
 };
 </script>

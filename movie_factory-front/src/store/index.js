@@ -12,6 +12,8 @@ export default new Vuex.Store({
     apiBaseURL: "https://localhost/api/movie",
     cast: [], // TODO is necessary ?
     selectedFilm: {},
+    getAllUser: [],
+    seenDuration: 0,
     selectedActor: {}, // mettre les films de l'acteur
     // dispatch au moment selection acteur => récupérer film actor et mettre tableau
     // selectActor => dispatch va chercher infos
@@ -28,7 +30,7 @@ export default new Vuex.Store({
   },
 
   /** -- Mutations--
-   * Enregistrer les mutations sur le store.
+   * Enregistrer les mutations sur le sto re.
    * functions de type f(state,payload) à l'aide des commits
    * forcément synchrone
    */
@@ -37,6 +39,9 @@ export default new Vuex.Store({
       state.login.getLoggedUser = payload.data;
       state.login.getFavorite = payload.data.favorite;
       state.login.getSeen = payload.data.seen;
+    },
+    fetchAllUser(state, payload) {
+      state.getAllUser = payload;
     },
     addPopularFilm(state, payload) {
       state.popularFilm = payload;
@@ -63,7 +68,6 @@ export default new Vuex.Store({
       let { id } = payload;
       for (let i = 0; i < state.login.getFavorite.length; i++) {
         if (state.login.getFavorite[i].id == id) {
-          console.log(state.login);
           state.login.getFavorite.splice(i, 1);
         }
       }
@@ -75,7 +79,6 @@ export default new Vuex.Store({
       let { id } = payload;
       for (let i = 0; i < state.login.getSeen.length; i++) {
         if (state.login.getSeen[i].id == id) {
-          console.log(state.login);
           state.login.getSeen.splice(i, 1);
         }
       }
@@ -101,7 +104,6 @@ export default new Vuex.Store({
         })
         // traitement de la réponse
         .then(async response => {
-          console.log(response);
           // extraction du token par destructuration
           let { token } = await response.data;
           // mise en forme du payload
@@ -141,13 +143,11 @@ export default new Vuex.Store({
               axios
                 .get(`http://localhost:3050/api/movie/video/${payload.id}`)
                 .then(async link => {
-                  console.log("link", link.data.results[0].key);
                   let thisLink =
                     "https://www.youtube.com/embed/" +
                     (await link.data.results[0].key);
                   // si le lien existe on ajoute le lien
                   if (link.data.results[0].site == "YouTube") {
-                    console.log(response.data);
                     let result = {
                       ...res.data,
                       ...response.data,

@@ -32,9 +32,11 @@ export default {
   components: {},
   methods: {
     async selectFilm(film) {
-      await this.$store.dispatch("addFilm", film);
-      if (this.$route.path !== "/film") {
-        this.$router.push("/film");
+      if (film) {
+        await this.$store.dispatch("addFilm", film);
+        if (this.$route.path !== "/film") {
+          this.$router.push("/film");
+        }
       }
     },
   },
@@ -44,6 +46,5 @@ export default {
 </script>
 
 <style scoped>
-@import './libs/moviecard.css';
-
+@import "./libs/moviecard.css";
 </style>

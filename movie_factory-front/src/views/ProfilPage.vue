@@ -5,36 +5,41 @@
       Welcome {{ login.getLoggedUser.username.toUpperCase() }} on your Profil
       Page
     </h2>
-    <div class="profilMain">
+    <div class="profilMain row m-0">
       <profil-component
+        class="col-2"
         :name="login.getLoggedUser.username"
         :favoriteCount="login.getLoggedUser.favorite"
         :seen="login.getLoggedUser.seen"
       ></profil-component>
 
-      <div class="favoriteFilm">
-        <h3>Favorites Film</h3>
-        <movie-card
-          v-for="(film, index) in login.getFavorite"
-          :key="index"
-          :film="film"
-          :title="film.title"
-          :path="film.poster_path"
-          :description="film.overview"
-          :vote="film.vote_average"
-        ></movie-card>
-      </div>
-      <div class="seenFilm">
-        <h3>Seen Film</h3>
-        <movie-card
-          v-for="(film, index) in login.getSeen"
-          :key="index"
-          :film="film"
-          :title="film.title"
-          :path="film.poster_path"
-          :description="film.overview"
-          :vote="film.vote_average"
-        ></movie-card>
+      <div class="col-10">
+        <h3 class="col-12 bg-dark">Favorites Film</h3>
+        <div class="favoriteFilm row">
+          <movie-card
+            class="homeFilmCard col-6"
+            v-for="(film, index) in login.getFavorite"
+            :key="index"
+            :film="film"
+            :title="film.title"
+            :path="film.poster_path"
+            :description="film.overview"
+            :vote="film.vote_average"
+          ></movie-card>
+        </div>
+        <h3 class="col-12 bg-dark">Seen Film</h3>
+        <div class="seenFilm row">
+          <movie-card
+            class="homeFilmCard col-6"
+            v-for="(film, index) in login.getSeen"
+            :key="index"
+            :film="film"
+            :title="film.title"
+            :path="film.poster_path"
+            :description="film.overview"
+            :vote="film.vote_average"
+          ></movie-card>
+        </div>
       </div>
     </div>
   </div>

@@ -16,7 +16,7 @@
 
         <div class="selectedFilmDescribe">
           <iframe
-            v-if="selectedFilm.results[0].key"
+            v-if="selectedFilm.results && selectedFilm.results[0].key"
             width="480"
             height="320"
             :src="$data.youtubePath + selectedFilm.results[0].key"
@@ -153,15 +153,13 @@ export default {
   },
   methods: {
     handleActor(actor) {
-      console.log("Actor: ", actor);
       axios
         .get(`http://localhost:3050/api/movie/person/${actor}`)
-        .then(async (response) => {
+        .then(async response => {
           let result = await response.data.results.slice(0, 6);
-          console.log(result);
           this.actorsFilm = result;
         })
-        .catch((err) => console.log(err));
+        .catch(err => console.log(err));
     },
     /**
      * prends un film et l'ajoute dans un tableau contenant tous les films favoris
@@ -226,12 +224,12 @@ export default {
     handleActorsFilm(index) {
       axios
         .get(`http://localhost:3050/api/movie/${index.id}`)
-        .then(async (response) => {
+        .then(async response => {
           let result = await response.data;
           this.$store.dispatch("addFilm", result);
           this.actorsFilm = [];
         })
-        .catch((err) => console.log(err));
+        .catch(err => console.log(err));
     },
   },
 };

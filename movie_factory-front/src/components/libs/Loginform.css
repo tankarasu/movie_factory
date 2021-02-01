@@ -14,23 +14,8 @@
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
-.login-title {
-  margin-top: 15px;
-  text-align: center;
-  font-size: 30px;
-  letter-spacing: 2px;
-  margin-top: 15px;
-  font-weight: bold;
-  color: #ecf0f5;
-}
-
 .loginHeader img {
   margin-top: 2rem;
-}
-
-.login-form {
-  margin-top: 25px;
-  text-align: left;
 }
 
 .log {
@@ -102,17 +87,14 @@ label {
   letter-spacing: 1px;
 }
 
-.btn-outline-primary {
-  border-color: #0db8de;
-  color: #0db8de;
+.btn-outline-danger {
   border-radius: 0px;
   font-weight: bold;
   letter-spacing: 1px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 
-.btn-outline-primary:hover {
-  background-color: #0db8de;
+.btn-outline-danger:hover {
   right: 0px;
 }
 

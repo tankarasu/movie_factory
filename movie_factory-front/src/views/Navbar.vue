@@ -48,9 +48,16 @@ export default {
       }
     },
     getCommunityPage() {
-      if (this.$route.name != "community") {
-        this.$router.push("/community");
-      }
+      axios
+        .get("http://localhost:3050/user/alluser")
+        .then(async (response) => {
+          let result = await response.data;
+          this.$store.commit("fetchAllUser", result);
+          if (this.$route.name != "community") {
+            this.$router.push("/community");
+          }
+        })
+        .catch((err) => err);
     },
   },
 };
@@ -58,5 +65,4 @@ export default {
 
 <style scoped>
 @import "./libs/Navbar.css";
-
 </style>
