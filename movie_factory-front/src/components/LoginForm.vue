@@ -98,7 +98,7 @@
             >
               reset </span
             >|-->
-            <button class="btn" @click="handleSignup()"> Not registered yet</button>
+            <span class="btn" @click="handleSignup()"> Not registered yet</span>
             <button type="button" class="btn" data-toggle="modal" data-target="#staticBackdrop">
               Forgot password
             </button>
@@ -134,7 +134,7 @@
       </div>
 
       <div class="modal-body d-flex justify-content-center pb-0">
-            <input class="pb-0 mb-0" type="text" v-model="recipientEmail" placeholder="regis@mail.fr" required/>
+            <input class="pb-0 mb-0" type="text" v-model="forgotInput" placeholder="regis@mail.fr" required/>
       </div>
       <div v-if="isForgot">
         <mailer-component :recipientEmail="this.recipientEmail"></mailer-component>
@@ -178,6 +178,7 @@ export default {
       username: "",
       email: "",
       isForgot:false,
+      forgotInput: "",
       recipientEmail: "",
       newPassword: "",
       password: "",
@@ -194,15 +195,10 @@ export default {
   },
   // regroupe les methodes du composants
   methods: {
-    handleTest() {
-      this.$store.dispatch("fetchUser", {
-        email: this.email,
-        password: this.password,
-        router: this.$router,
-      });
-    },
     testHandleForgot(){
       this.isForgot=true;
+      this.recipientEmail=this.forgotInput;
+      this.forgotInput="";
     },
     handleClick() {
       // TODO modulariser si possible

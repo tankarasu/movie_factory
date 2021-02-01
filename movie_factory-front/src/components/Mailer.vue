@@ -1,6 +1,7 @@
 <template>
     <div>
       <!-- v-if boolean sent true, message envoi mail ok. Else, msg pas ok -->
+      <p>	{{ recipientEmail }}</p>
       <span class="text-success" v-if="sent">Message sent to {{ recipientEmail }} ! Please check your inbox</span>
       <span class="text-danger" v-else="!sent">An error occured</span>
     </div>
@@ -22,24 +23,23 @@
       },
       
       methods:{
-          postEmailToReset(){
+          emailToReset(){
             axios
           .post("http://localhost:3050/user/forgot", {
-            recipientEmail: this.recipientEmail 
+            recipientEmail: this.recipientEmail
           })
           .then((response) => {
             if (response.data == "false") {
               this.sent=true;
             }
+            console.log("Front: Réponse recue: "+response.data);
           })
-          .catch((err) => console.log(err));
+          .catch((err) => console.log("Front: Catch: "+err));
           }
         },
 
         created() {
-          console.log(this.recipientEmail);
-          
-          this.postEmailToReset();
+          this.emailToReset();
         }
 
 
