@@ -36,6 +36,7 @@ export default new Vuex.Store({
     selectUser(state, payload) {
       state.login.getLoggedUser = payload.data;
       state.login.getFavorite = payload.data.favorite;
+      state.login.getSeen = payload.data.seen;
     },
     addPopularFilm(state, payload) {
       state.popularFilm = payload;

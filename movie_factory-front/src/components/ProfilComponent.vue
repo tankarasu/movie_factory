@@ -11,6 +11,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      isFavoriteSelected: true,
+    };
+  },
   name: "profilComponent",
   props: ["name", "favoriteCount", "seen"],
 };
