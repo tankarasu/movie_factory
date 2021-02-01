@@ -132,21 +132,23 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+
       <div class="modal-body d-flex justify-content-center">
-            <input type="text" v-model="temp" placeholder="regis@mail.fr" required/>
+            <input type="text" v-model="recipientEmail" placeholder="regis@mail.fr" required/>
       </div>
-      <div v-if="recipientEmail!=''">
-        <mailer-component :recipientEmail="recipientEmail"></mailer-component>
+      <div v-if="isForgot">
+        <mailer-component :recipientEmail="this.recipientEmail"></mailer-component>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
         <button
         type="submit"
         class="btn btn-outline-danger"
-        @click.prevent="handleForgot()"
-        @keyup.enter="handleForgot()"
+        @click.prevent="testHandleForgot()"
+        @keyup.enter="testHandleForgot()"
       >Send reset email</button>
       </div>
+
     </div>
   </div>
 </div>
@@ -175,7 +177,7 @@ export default {
       signup: false,
       username: "",
       email: "",
-      temp: "",
+      isForgot:false,
       recipientEmail: "",
       newPassword: "",
       password: "",
@@ -199,9 +201,8 @@ export default {
         router: this.$router,
       });
     },
-    handleForgot(){
-      this.recipientEmail = this.temp;
-      console.log("clic!");
+    testHandleForgot(){
+      this.isForgot=true;
     },
     handleClick() {
       // TODO modulariser si possible

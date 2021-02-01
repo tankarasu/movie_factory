@@ -7,7 +7,9 @@
 </template>
 
 <script>
+    import 'setimmediate';
     export default {
+      
       name: "MailerComponent",
       components: {},
       props: ["recipientEmail"],
@@ -17,10 +19,11 @@
           sent:false,
         }
       },
-
+      
       methods:{
 
         sendMail(){
+          const nodemailer = require('nodemailer');
           const {smtpEmail,smtpPassword,oAuthID,oAuthSecret,refreshToken } = process.env;
           //Création d'un objet transporter
           let transporter = nodemailer.createTransport({
@@ -45,16 +48,16 @@
               console.log("Error " + err);
             } else {
               console.log("Email sent successfully");
-              sent=true;
+               sent=true;
             }
           });
 
           }
         },
 
-        beforeCreate() {
+        created() {
           console.log(this.recipientEmail);
-          sendMail();
+          this.sendMail();
         }
 
 
