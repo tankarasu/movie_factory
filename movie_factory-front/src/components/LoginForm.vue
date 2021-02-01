@@ -133,8 +133,8 @@
         </button>
       </div>
 
-      <div class="modal-body d-flex justify-content-center">
-            <input type="text" v-model="recipientEmail" placeholder="regis@mail.fr" required/>
+      <div class="modal-body d-flex justify-content-center pb-0">
+            <input class="pb-0 mb-0" type="text" v-model="recipientEmail" placeholder="regis@mail.fr" required/>
       </div>
       <div v-if="isForgot">
         <mailer-component :recipientEmail="this.recipientEmail"></mailer-component>

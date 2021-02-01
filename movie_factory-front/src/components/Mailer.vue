@@ -1,13 +1,14 @@
 <template>
     <div>
-      <!-- if v-if boolean sent true, message envoi mail ok -->
-      <p>{{ recipientEmail }}</p>
+      <!-- v-if boolean sent true, message envoi mail ok. Else, msg pas ok -->
       <span class="text-success" v-if="sent">Message sent to {{ recipientEmail }} ! Please check your inbox</span>
+      <span class="text-danger" v-else="!sent">An error occured</span>
     </div>
 </template>
 
 <script>
-    import 'setimmediate';
+    //import 'setimmediate';*
+    import axios from "axios";
     export default {
       
       name: "MailerComponent",
@@ -16,48 +17,29 @@
 
       data(){
         return{
-          sent:false,
+          sent:false, // sent à récupérer dans réponse requête axios
         }
       },
       
       methods:{
-
-        sendMail(){
-          const nodemailer = require('nodemailer');
-          const {smtpEmail,smtpPassword,oAuthID,oAuthSecret,refreshToken } = process.env;
-          //Création d'un objet transporter
-          let transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-              type: 'OAuth2',
-              user: smtpEmail,
-              pass: smtpPassword,
-              clientId: oAuthID,
-              clientSecret: oAuthSecret,
-              refreshToken: refreshToken
+          postEmailToReset(){
+            axios
+          .post("http://localhost:3050/user/forgot", {
+            recipientEmail: this.recipientEmail 
+          })
+          .then((response) => {
+            if (response.data == "false") {
+              this.sent=true;
             }
-          });  
-            let mailOptions = {
-            from: "tmfresetservice@gmail.com",
-            to: this.recipientEmail,
-            subject: 'Nodemailer Project',
-            text: 'Hi from your nodemailer project'
-          };
-          transporter.sendMail(mailOptions, function(err, data) {
-            if (err) {
-              console.log("Error " + err);
-            } else {
-              console.log("Email sent successfully");
-               sent=true;
-            }
-          });
-
+          })
+          .catch((err) => console.log(err));
           }
         },
 
         created() {
           console.log(this.recipientEmail);
-          this.sendMail();
+          
+          this.postEmailToReset();
         }
 
 
