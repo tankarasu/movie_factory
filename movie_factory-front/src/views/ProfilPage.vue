@@ -61,8 +61,5 @@ export default {
 </script>
 
 <style scoped>
-h2 {
-  background: #111416ea;
-  color: aliceblue;
-}
+@import "./libs/Profil.css";
 </style>

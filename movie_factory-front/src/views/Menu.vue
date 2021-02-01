@@ -56,22 +56,7 @@ export default {
 </script>
 
 <style scoped>
-.leftMenu {
-  color: aliceblue;
-  background: #111416ea;
-  height: 90vh;
-  overflow: hidden;
-  overflow-y: scroll;
-}
-
-.catMenu {
-  text-align: left;
-  list-style: none;
-}
-
-.leftFilter {
-  width: 100%;
-}
+@import './libs/Menu.css';
 
 
 </style>

@@ -44,32 +44,6 @@ export default {
 </script>
 
 <style scoped>
-.movieCard {
-  border: 1px solid transparent;
-  cursor: pointer;
-}
+@import './libs/moviecard.css';
 
-.movieCard:hover {
-  border: 1px solid #6c6c6c;
-}
-
-.moviePict {
-  width: 150px;
-}
-
-.cardBody {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.describe {
-  font-size: 1rem;
-  text-align: justify;
-}
-
-.vote {
-  font-size: 1rem;
-  text-align: justify;
-}
 </style>

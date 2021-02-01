@@ -40,14 +40,6 @@ export default {
 </script>
 
 <style scoped>
-.cat {
-  font-size: 1rem;
-  border: 1px solid transparent;
-  cursor: pointer;
-}
+@import './libs/menulink.css';
 
-.cat:hover {
-  border: 1px solid #6c6c6c;
-  cursor: pointer;
-}
 </style>

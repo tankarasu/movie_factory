@@ -22,10 +22,6 @@ export default {
 </script>
 
 <style scoped>
-.profilComponent {
-  background: #111416ea;
-  width: 200px;
-  color: aliceblue;
-  border-radius: 1rem;
-}
+@import "./libs/profilcomponent.css";
+
 </style>

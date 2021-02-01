@@ -23,8 +23,6 @@ export default {
 </script>
 
 <style scoped>
-main {
-  background: #111416ea;
-  color: aliceblue;
-}
+@import './libs/Community.css';
+
 </style>
