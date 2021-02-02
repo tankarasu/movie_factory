@@ -75,3 +75,11 @@ div {
   height: 250px;
   background: #111416ea;
 }
+
+.badge {
+  font-size: 100% !important;
+}
+
+.badge:hover {
+  cursor: pointer;
+}

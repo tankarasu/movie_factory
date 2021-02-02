@@ -3,7 +3,7 @@
     <div class="headerTitle">
       <img src="../assets/homeLogo.png" alt="logo" id="logo" />
       <h1>The Movie Factory</h1>
-      <search-bar></search-bar>
+      <search-bar v-if="this.$route.name == 'home'"></search-bar>
     </div>
     <ul class="mainMenu bg-dark">
       <li @click="getPopular()">home</li>

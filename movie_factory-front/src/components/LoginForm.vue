@@ -38,7 +38,7 @@
             <input type="password" class="form-control" v-model="newPassword" />
           </div>
           <!-- MESSAGE SERVEUR BROWSER -->
-<!--           <span id="messageServeur" class="text-warning">{{
+          <!--           <span id="messageServeur" class="text-warning">{{
             serveurMessage
           }}</span> -->
           <!-- 3 spans reset forgot signup -->
@@ -48,7 +48,12 @@
             >
               reset </span
             >| --><span class="btn" @click="handleSignup()"> New account</span>
-            <button type="button" class="btn" data-toggle="modal" data-target="#staticBackdrop">
+            <button
+              type="button"
+              class="btn"
+              data-toggle="modal"
+              data-target="#staticBackdrop"
+            >
               Forgot password
             </button>
           </div>
@@ -74,7 +79,7 @@
             >
               Cancel
             </button>
-<!--             <button
+            <!--             <button
               v-if="forgot"
               type="submit"
               class="btn btn-outline-info"
@@ -121,51 +126,79 @@
         </div>
       </div>
     </div>
-  
-  <div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Forgot password</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body d-flex justify-content-center pb-0">
-              <input class="pb-0 mb-0" type="text" v-model="forgotInput" placeholder="regis@mail.fr" required/>
-        </div>
-        <div v-if="isForgot">
-          <mailer-component :recipientEmail="this.recipientEmail"></mailer-component>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button
-          type="submit"
-          class="btn btn-outline-danger"
-          @click.prevent="handleForgot()"
-          @keyup.enter="handleForgot()"
-        >Send reset email</button>
-        </div>
 
+    <div
+      class="modal fade"
+      id="staticBackdrop"
+      data-backdrop="static"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">
+              Forgot password
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body d-flex justify-content-center pb-0">
+            <input
+              class="pb-0 mb-0"
+              type="text"
+              v-model="forgotInput"
+              placeholder="regis@mail.fr"
+              required
+            />
+          </div>
+          <div v-if="isForgot">
+            <mailer-component
+              :recipientEmail="this.recipientEmail"
+            ></mailer-component>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn btn-outline-danger"
+              @click.prevent="handleForgot()"
+              @keyup.enter="handleForgot()"
+            >
+              Send reset email
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
-  
 </template>
 
 <script>
 import Vue from "vue";
 import VueRouter from "vue-router";
 import axios from "axios";
-import { functions } from "../assets/functions";
 
 // import de la methode qui nous donnera le store
 import { mapState } from "vuex";
 import MailerComponent from "./Mailer.vue";
 
 export default {
-  components:{ MailerComponent },
+  components: { MailerComponent },
   name: "LoginForm",
   props: {},
   data() {
@@ -178,7 +211,7 @@ export default {
       signup: false,
       username: "",
       email: "",
-      isForgot:false,
+      isForgot: false,
       forgotInput: "",
       recipientEmail: "",
       newPassword: "",
@@ -196,11 +229,10 @@ export default {
   },
   // regroupe les methodes du composants
   methods: {
-
-    handleForgot(){
-      this.isForgot=true;
-      this.recipientEmail=this.forgotInput;
-      this.forgotInput="";
+    handleForgot() {
+      this.isForgot = true;
+      this.recipientEmail = this.forgotInput;
+      this.forgotInput = "";
     },
     handleClick() {
       let log = this.login.getLoginURL;

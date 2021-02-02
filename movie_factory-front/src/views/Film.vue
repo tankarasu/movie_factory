@@ -29,14 +29,32 @@
       </div>
       <div id="filmFooter">
         <p>
-          Add to favorite
-          <span class="badge badge-danger" @click="addFavorite(selectedFilm)"
-            >+</span
-          >
+          <span> Favorite </span>
 
-          Seen/unseen
-          <span class="badge badge-success" @click="addToSeen(selectedFilm)"
-            >+</span
+          <span
+            class="badge badge-success badges"
+            v-if="!isFavoriteFilm"
+            @click="addFavorite(selectedFilm)"
+            >Add</span
+          >
+          <span
+            v-if="isFavoriteFilm"
+            class="badge badge-danger badges"
+            @click="addFavorite(selectedFilm)"
+            >Remove</span
+          >
+          <span> Seen</span>
+          <span
+            v-if="!isSeenFilm"
+            class="badge badge-success"
+            @click="addToSeen(selectedFilm)"
+            >Add</span
+          >
+          <span
+            v-if="isSeenFilm"
+            class="badge badge-danger"
+            @click="addToSeen(selectedFilm)"
+            >Remove</span
           >
         </p>
 
@@ -149,17 +167,17 @@ export default {
     };
   },
   computed: {
-    ...mapState(["selectedFilm", "login"]),
+    ...mapState(["selectedFilm", "login", "isFavoriteFilm", "isSeenFilm"]),
   },
   methods: {
     handleActor(actor) {
       axios
         .get(`http://localhost:3050/api/movie/person/${actor}`)
-        .then(async response => {
+        .then(async (response) => {
           let result = await response.data.results.slice(0, 6);
           this.actorsFilm = result;
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     },
     /**
      * prends un film et l'ajoute dans un tableau contenant tous les films favoris
@@ -192,6 +210,7 @@ export default {
           filmId: film,
         });
       }
+      this.$store.commit("toggleFavorite");
     },
     addToSeen(film) {
       let { getSeen } = this.$store.state.login;
@@ -220,17 +239,57 @@ export default {
           filmId: film,
         });
       }
+      this.$store.commit("toggleSeenFilm");
     },
     handleActorsFilm(index) {
       axios
         .get(`http://localhost:3050/api/movie/${index.id}`)
-        .then(async response => {
+        .then(async (response) => {
           let result = await response.data;
           this.$store.dispatch("addFilm", result);
           this.actorsFilm = [];
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     },
+  },
+  mounted() {
+    // quand le composant est monté
+    let favorite = this.login.getFavorite;
+    let seen = this.login.getSeen;
+    // on suppose avec index -1 que le film n'est pas favori
+    let index = -1;
+    for (let i = 0; i < favorite.length; i++) {
+      // si un film dans les favoris à le même id que le film courant
+      // son index n'est plus -1 donc présent
+      if (favorite[i].id == this.selectedFilm.id) {
+        index = i;
+      }
+    }
+    // si le film est absent mais que le marqueur dit présent
+    if (index == -1 && this.isFavoriteFilm) {
+      this.$store.commit("toggleFavorite");
+    }
+    // si le film est présent mais que le marqueur dit absent
+    if (index != -1 && this.isFavoriteFilm) {
+      this.$store.commit("toggleFavorite");
+    }
+     index = -1;
+    for (let i = 0; i < seen.length; i++) {
+      // si un film dans les seen à le même id que le film courant
+      // son index n'est plus -1 donc présent
+      if (seen[i].id == this.selectedFilm.id) {
+        index = i;
+      }
+    }
+    // si le film est absent mais que le marqueur dit présent
+    if (index == -1 && this.isSeenFilm) {
+      this.$store.commit("toggleSeenFilm");
+    }
+    // si le film est présent mais que le marqueur dit absent
+    if (index != -1 && this.isSeenFilm) {
+      this.$store.commit("toggleFavorite");
+    }
+  
   },
 };
 </script>

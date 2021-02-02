@@ -12,6 +12,8 @@ export default new Vuex.Store({
     apiBaseURL: "https://localhost/api/movie",
     cast: [], // TODO is necessary ?
     selectedFilm: {},
+    isFavoriteFilm: false,
+    isSeenFilm: false,
     getAllUser: [],
     seenDuration: 0,
     selectedActor: {}, // mettre les films de l'acteur
@@ -39,6 +41,12 @@ export default new Vuex.Store({
       state.login.getLoggedUser = payload.data;
       state.login.getFavorite = payload.data.favorite;
       state.login.getSeen = payload.data.seen;
+    },
+    toggleFavorite(state, payload) {
+      state.isFavoriteFilm = !state.isFavoriteFilm;
+    },
+    toggleSeenFilm(state, payload) {
+      state.isSeenFilm = !state.isSeenFilm;
     },
     fetchAllUser(state, payload) {
       state.getAllUser = payload;
