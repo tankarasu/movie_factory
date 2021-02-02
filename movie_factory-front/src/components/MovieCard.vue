@@ -32,9 +32,11 @@ export default {
   components: {},
   methods: {
     async selectFilm(film) {
-      await this.$store.dispatch("addFilm", film);
-      if (this.$route.path !== "/film") {
-        this.$router.push("/film");
+      if (film) {
+        await this.$store.dispatch("addFilm", film);
+        if (this.$route.path !== "/film") {
+          this.$router.push("/film");
+        }
       }
     },
   },
@@ -44,32 +46,5 @@ export default {
 </script>
 
 <style scoped>
-.movieCard {
-  border: 1px solid transparent;
-  cursor: pointer;
-}
-
-.movieCard:hover {
-  border: 1px solid #6c6c6c;
-}
-
-.moviePict {
-  width: 150px;
-}
-
-.cardBody {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.describe {
-  font-size: 1rem;
-  text-align: justify;
-}
-
-.vote {
-  font-size: 1rem;
-  text-align: justify;
-}
+@import "./libs/moviecard.css";
 </style>

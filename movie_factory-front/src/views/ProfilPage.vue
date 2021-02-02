@@ -5,22 +5,60 @@
       Welcome {{ login.getLoggedUser.username.toUpperCase() }} on your Profil
       Page
     </h2>
-    <profil-component
-      :name="login.getLoggedUser.username"
-      :favoriteCount="login.getLoggedUser.favorite"
-      :seen="login.getLoggedUser.seen"
-    ></profil-component>
+    <div class="profilMain row m-0">
+      <profil-component
+        class="col-2"
+        :name="login.getLoggedUser.username"
+        :favoriteCount="login.getLoggedUser.favorite"
+        :seen="login.getLoggedUser.seen"
+      ></profil-component>
+
+      <div class="col-10">
+        <h3 class="col-12 bg-dark">Favorites Film</h3>
+        <div class="favoriteFilm row">
+          <movie-card
+            class="homeFilmCard col-6"
+            v-for="(film, index) in login.getFavorite"
+            :key="index"
+            :film="film"
+            :title="film.title"
+            :path="film.poster_path"
+            :description="film.overview"
+            :vote="film.vote_average"
+          ></movie-card>
+        </div>
+        <h3 class="col-12 bg-dark">Seen Film</h3>
+        <div class="seenFilm row">
+          <movie-card
+            class="homeFilmCard col-6"
+            v-for="(film, index) in login.getSeen"
+            :key="index"
+            :film="film"
+            :title="film.title"
+            :path="film.poster_path"
+            :description="film.overview"
+            :vote="film.vote_average"
+          ></movie-card>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import MovieCard from "../components/MovieCard.vue";
 import ProfilComponent from "../components/ProfilComponent.vue";
 import Navbar from "./Navbar.vue";
 
 export default {
   name: "ProfilPage",
-  components: { Navbar, ProfilComponent },
+  components: { Navbar, ProfilComponent, MovieCard },
+  MovieCardata() {
+    return {
+      isFavoriteSelected: true,
+    };
+  },
   computed: {
     ...mapState(["login"]),
   },
@@ -28,8 +66,5 @@ export default {
 </script>
 
 <style scoped>
-h2 {
-  background: #111416ea;
-  color: aliceblue;
-}
+@import "./libs/Profil.css";
 </style>

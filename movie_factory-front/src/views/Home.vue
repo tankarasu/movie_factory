@@ -39,12 +39,6 @@ export default {
 Menu;
 </script>
 <style scoped>
-.home {
-  height: 100vh;
-}
+@import './libs/Home.css';
 
-.contentPage {
-  margin: 0;
-  height: 100vh;
-}
 </style>

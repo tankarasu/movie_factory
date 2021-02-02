@@ -16,7 +16,7 @@
 
         <div class="selectedFilmDescribe">
           <iframe
-            v-if="selectedFilm.results[0].key"
+            v-if="selectedFilm.results && selectedFilm.results[0].key"
             width="480"
             height="320"
             :src="$data.youtubePath + selectedFilm.results[0].key"
@@ -24,7 +24,7 @@
             allowfullscreen
           ></iframe>
 
-          <p>{{ selectedFilm.overview }}</p>
+          <p>{{ selectedFilm.overview }} $</p>
         </div>
       </div>
       <div id="filmFooter">
@@ -38,6 +38,30 @@
           <span class="badge badge-success" @click="addToSeen(selectedFilm)"
             >+</span
           >
+        </p>
+
+        <p>
+          Gain:
+          <span class="badge badge-info">
+            {{
+              new Intl.NumberFormat("de-DE", {
+                style: "currency",
+                currency: "USD",
+                maximumSignificantDigits: 1,
+              }).format(selectedFilm.revenue - selectedFilm.budget)
+            }}
+          </span>
+          Runtime:<span class="badge badge-info">
+            {{ selectedFilm.runtime }}</span
+          >mn
+        </p>
+        <p>
+          <span v-for="(genre, index) in selectedFilm.genres" :key="index">
+            -{{ genre.name }}-
+          </span>
+        </p>
+        <p v-if="selectedFilm.homepage">
+          <a :href="selectedFilm.homepage">Official Home Page</a>
         </p>
         <p>
           popularity:<span class="badge badge-warning">
@@ -125,195 +149,92 @@ export default {
     };
   },
   computed: {
-    ...mapState(["selectedFilm", "cast"]),
+    ...mapState(["selectedFilm", "login"]),
   },
   methods: {
     handleActor(actor) {
-      console.log("Actor: ", actor);
       axios
         .get(`http://localhost:3050/api/movie/person/${actor}`)
-        .then(async (response) => {
+        .then(async response => {
           let result = await response.data.results.slice(0, 6);
-          console.log(result);
           this.actorsFilm = result;
         })
-        .catch((err) => console.log(err));
+        .catch(err => console.log(err));
     },
+    /**
+     * prends un film et l'ajoute dans un tableau contenant tous les films favoris
+     * @param {Object} film à ajouter aux favoris
+     */
     addFavorite(film) {
-      axios
-        .put(`http://localhost:3050/user/addfavorite`, {
-          email: "karasutan@gmail.com",
+      let { getFavorite } = this.$store.state.login;
+
+      let isFavorite = false;
+
+      for (let index = 0; index < getFavorite.length; index++) {
+        const element = getFavorite[index];
+        if (element.id == film.id) {
+          isFavorite = true;
+        }
+      }
+      // ajout du film aux favoris du User
+      if (!isFavorite) {
+        this.$store.commit("addToFavorite", film);
+        axios.put(`http://localhost:3050/user/addfavorite`, {
+          email: this.login.getLoggedUser.email,
           filmId: film,
-        })
-        .then((res) => console.log(res))
-        .catch((err) => err);
+        });
+      }
+
+      if (isFavorite) {
+        this.$store.commit("removeFavorite", film);
+        axios.put(`http://localhost:3050/user/removefavorite`, {
+          email: this.login.getLoggedUser.email,
+          filmId: film,
+        });
+      }
     },
     addToSeen(film) {
-      axios
-        .put(`http://localhost:3050/user/seen`, {
-          email: "karasutan@gmail.com",
+      let { getSeen } = this.$store.state.login;
+
+      let isSeen = false;
+
+      for (let index = 0; index < getSeen.length; index++) {
+        const element = getSeen[index];
+        if (element.id == film.id) {
+          isSeen = true;
+        }
+      }
+      // ajout du film aux favoris du User
+      if (!isSeen) {
+        this.$store.commit("addToSeen", film);
+        axios.put(`http://localhost:3050/user/seen`, {
+          email: this.login.getLoggedUser.email,
           filmId: film,
-        })
-        .then((res) => console.log(res))
-        .catch((err) => err);
+        });
+      }
+
+      if (isSeen) {
+        this.$store.commit("removeSeen", film);
+        axios.put(`http://localhost:3050/user/removeseen`, {
+          email: this.login.getLoggedUser.email,
+          filmId: film,
+        });
+      }
     },
     handleActorsFilm(index) {
       axios
         .get(`http://localhost:3050/api/movie/${index.id}`)
-        .then(async (response) => {
+        .then(async response => {
           let result = await response.data;
           this.$store.dispatch("addFilm", result);
           this.actorsFilm = [];
-
-          // axios
-          //   .get(
-          //     `http://localhost:3050/api/movie/video/${this.selectedFilm.id}`
-          //   )
-          //   .then(async (res) => {
-          //     if (res.data.results[0].site == "YouTube") {
-          //       let path =
-          //         (await "https://www.youtube.com/embed/") +
-          //         (await res.data.results[0].key);
-          //       this.$store.dispatch("fetchVideoPath", path);
-          //     } else {
-          //     }
-          //   })
-          //   .catch((err) => err);
         })
-        .catch((err) => console.log(err));
+        .catch(err => console.log(err));
     },
-  },
-  beforeMount() {
-    console.log("before Mount l155");
-  },
-  beforeUpdate() {
-    console.log("before update l158");
-    // axios
-    //   .get(`http://localhost:3050/api/movie/credits/${this.selectedFilm.id}`)
-    //   .then(async response => {
-    //     let result = await response.data;
-    //     console.log("result", result);
-    //     result = result.cast.slice(0, 5);
-    //     this.$store.dispatch("fetchCast", result);
-    //   })
-    //   .catch(err => console.log(err));
-    // axios
-    //   .get(`http://localhost:3050/api/movie/spec/${this.selectedFilm.id}`)
-    //   .then(async response => {
-    //     let result = await response.data;
-    //     this.$store.dispatch("fetchFilmSpec", result);
-    //   });
-  },
-  updated() {
-    console.log("updated l169");
-  },
-  created() {
-    console.log("created l172");
-  },
-  beforeCreate() {
-    console.log("before create l175");
-  },
-  beforeDestroy() {
-    console.log("before destroy l178");
-  },
-  destroyed() {
-    console.log("destroyed l181");
-  },
-  mounted() {
-    console.log("mounted l184");
-    // axios
-    //   .get(`http://localhost:3050/api/movie/video/${this.selectedFilm.id}`)
-    //   .then(async res => {
-
-    //   if (res.data.results[0].site == "YouTube") {
-    //     let path =
-    //       (await "https://www.youtube.com/embed/") +
-    //       (await res.data.results[0].key);
-
-    //   } else {
-    //   }
-    // })
-    //   .catch(err => err);
   },
 };
 </script>
 
 <style scoped>
-div {
-  color: white;
-}
-
-.photoActor {
-  border-radius: 50%;
-  width: 150px;
-}
-
-.filmFooter {
-  margin: 0;
-}
-
-.splide {
-  left: 15%;
-  margin-bottom: 2rem;
-}
-
-.photoFilm {
-  margin-left: 175px;
-  width: 150px;
-}
-
-.actorList {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.filmList {
-  display: flex;
-  flex-direction: row;
-}
-
-.filmCard {
-  margin: 0 auto;
-  width: 500px;
-  display: flex;
-  flex-direction: row;
-}
-
-.moviePict {
-  width: 85%;
-}
-
-#selectedFilm {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin: 0 auto;
-  margin-bottom: 3rem;
-}
-
-.selectedFilm {
-  background: #111416ea;
-}
-
-.selectedFilmDescribe {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: space-between;
-  padding-left: 1rem;
-}
-
-.selectedFilmDescribe p {
-  width: 480px;
-  text-align: justify;
-}
-
-.cardDescription {
-  display: flex;
-  flex-direction: column;
-  width: 300px;
-  height: 250px;
-  background: #111416ea;
-}
+@import "./libs/Film.css";
 </style>

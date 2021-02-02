@@ -26,20 +26,11 @@ export default {
     ...mapState(["popularFilm"]),
   },
   methods: {
-    console() {
-      console.log("movie console");
-    },
   },
 };
 </script>
 
 <style scoped>
-.mainContent {
-  color: aliceblue;
-  background: #111416ea;
-  height: 90vh;
-  margin: 0;
-  padding: 0;
-  overflow-y: scroll;
-}
+@import "./libs/Main.css";
+
 </style>

@@ -10,30 +10,38 @@ export default new Vuex.Store({
   // l'état (state) de l'application à un instant T
   state: {
     apiBaseURL: "https://localhost/api/movie",
-    cast: [],
+    cast: [], // TODO is necessary ?
     selectedFilm: {},
-    selectedFilmRuntime: 0,
+    getAllUser: [],
+    seenDuration: 0,
     selectedActor: {}, // mettre les films de l'acteur
     // dispatch au moment selection acteur => récupérer film actor et mettre tableau
     // selectActor => dispatch va chercher infos
-    videoPath: "",
+    videoPath: "", // TODO is necessary ?s
     filmSpec: {},
     login: {
       getLoginURL: "http://localhost:3050/user/login",
       getLoggedUser: {},
+      getFavorite: [],
+      getSeen: [],
     },
     popularFilm: [],
     categories: [],
   },
 
   /** -- Mutations--
-   * Enregistrer les mutations sur le store.
+   * Enregistrer les mutations sur le sto re.
    * functions de type f(state,payload) à l'aide des commits
    * forcément synchrone
    */
   mutations: {
     selectUser(state, payload) {
       state.login.getLoggedUser = payload.data;
+      state.login.getFavorite = payload.data.favorite;
+      state.login.getSeen = payload.data.seen;
+    },
+    fetchAllUser(state, payload) {
+      state.getAllUser = payload;
     },
     addPopularFilm(state, payload) {
       state.popularFilm = payload;
@@ -52,6 +60,28 @@ export default new Vuex.Store({
     },
     addFilmSpec(state, payload) {
       state.filmSpec = payload;
+    },
+    addToFavorite(state, payload) {
+      state.login.getFavorite.push(payload);
+    },
+    removeFavorite(state, payload) {
+      let { id } = payload;
+      for (let i = 0; i < state.login.getFavorite.length; i++) {
+        if (state.login.getFavorite[i].id == id) {
+          state.login.getFavorite.splice(i, 1);
+        }
+      }
+    },
+    addToSeen(state, payload) {
+      state.login.getSeen.push(payload);
+    },
+    removeSeen(state, payload) {
+      let { id } = payload;
+      for (let i = 0; i < state.login.getSeen.length; i++) {
+        if (state.login.getSeen[i].id == id) {
+          state.login.getSeen.splice(i, 1);
+        }
+      }
     },
   },
   /**
@@ -74,7 +104,6 @@ export default new Vuex.Store({
         })
         // traitement de la réponse
         .then(async response => {
-          console.log(response);
           // extraction du token par destructuration
           let { token } = await response.data;
           // mise en forme du payload
@@ -101,6 +130,7 @@ export default new Vuex.Store({
      */
     addFilm(context, payload) {
       // on va récupérer les infos du film via un appel axios
+      // on va ajouter le film à selectedFilm
       axios
         .get(`http://localhost:3050/api/movie/spec/${payload.id}`)
         .then(async res => {
@@ -113,13 +143,11 @@ export default new Vuex.Store({
               axios
                 .get(`http://localhost:3050/api/movie/video/${payload.id}`)
                 .then(async link => {
-                  console.log("link", link.data.results[0].key);
                   let thisLink =
                     "https://www.youtube.com/embed/" +
                     (await link.data.results[0].key);
                   // si le lien existe on ajoute le lien
                   if (link.data.results[0].site == "YouTube") {
-                    console.log(response.data);
                     let result = {
                       ...res.data,
                       ...response.data,
