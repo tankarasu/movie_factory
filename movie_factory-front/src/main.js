@@ -3,6 +3,8 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 
+// config du dotenv
+require("dotenv").config();
 // importation des éléments pour bootstrap
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 

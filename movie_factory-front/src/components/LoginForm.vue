@@ -197,6 +197,8 @@ import axios from "axios";
 import { mapState } from "vuex";
 import MailerComponent from "./Mailer.vue";
 
+const movieFactoryURL = process.env.MOVIE_FACTORY_API_URL;
+
 export default {
   components: { MailerComponent },
   name: "LoginForm",
@@ -302,18 +304,19 @@ export default {
       if (this.isPasswordEmpty) return;
 
       axios
-        .post("http://localhost:3050/user/signup", {
+
+        .post(`${movieFactoryURL}/user/signup`, {
           email: this.email,
           password: this.password,
           username: this.username,
         })
-        .then((response) => {
+        .then(response => {
           if (response.data == "email déja utilisé") {
             this.username = response.data + " Régis";
             setTimeout(() => (this.username = ""), 2000);
           }
         })
-        .catch((err) => console.log(err));
+        .catch(err => console.log(err));
     },
     sendMail() {
       // email vide
