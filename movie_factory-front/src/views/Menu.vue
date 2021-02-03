@@ -1,5 +1,5 @@
 <template>
-  <nav class="leftMenu" id="sidebar">
+  <nav class="leftMenu m-0 " id="sidebar">
     <!-- commande pour plier/déplier les genres -->
     <div class="sidebar-header">
       <h3>Filter:</h3>
@@ -37,6 +37,7 @@
       <menu-link name="2018"></menu-link>
       <menu-link name="2017"></menu-link>
     </ul>
+    
   </nav>
 </template>
 

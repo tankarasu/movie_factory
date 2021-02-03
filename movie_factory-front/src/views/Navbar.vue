@@ -1,9 +1,9 @@
 <template>
-  <header class="navMenu container sticky-top">
-    <div class="headerTitle">
+  <header class="navMenu container-lg sticky-top">
+    <div class="headerTitle row">
       <img src="../assets/homeLogo.png" alt="logo" id="logo" />
       <h1>The Movie Factory</h1>
-      <search-bar v-if="this.$route.name == 'home'"></search-bar>
+      <search-bar ></search-bar>
     </div>
     <ul class="mainMenu bg-dark">
       <li @click="getPopular()">home</li>

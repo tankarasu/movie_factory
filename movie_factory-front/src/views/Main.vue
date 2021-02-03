@@ -1,7 +1,7 @@
 <template>
-  <div class="mainContent row">
+  <div class="mainContent row m-0">
     <movie-card
-      class="homeFilmCard col-6 p-0 m-0"
+      class="homeFilmCard col-md-6 p-0 m-0"
       v-for="(film, index) in popularFilm.results"
       :key="index"
       :title="film.title"

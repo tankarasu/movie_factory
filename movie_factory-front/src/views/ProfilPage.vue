@@ -7,17 +7,17 @@
     </h2>
     <div class="profilMain row m-0">
       <profil-component
-        class="col-2"
+        class="col-sm-2"
         :name="login.getLoggedUser.username"
         :favoriteCount="login.getLoggedUser.favorite"
         :seen="login.getLoggedUser.seen"
       ></profil-component>
 
-      <div class="col-10">
+      <div class="col-sm-10">
         <h3 class="col-12 bg-dark">Favorites Film</h3>
         <div class="favoriteFilm row">
           <movie-card
-            class="homeFilmCard col-6"
+            class="homeFilmCard col-lg-6"
             v-for="(film, index) in login.getFavorite"
             :key="index"
             :film="film"
@@ -27,10 +27,10 @@
             :vote="film.vote_average"
           ></movie-card>
         </div>
-        <h3 class="col-12 bg-dark">Seen Film</h3>
+        <h3 class="col-sm-12 bg-dark">Seen Film</h3>
         <div class="seenFilm row">
           <movie-card
-            class="homeFilmCard col-6"
+            class="homeFilmCard col-lg-6"
             v-for="(film, index) in login.getSeen"
             :key="index"
             :film="film"

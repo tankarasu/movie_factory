@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-lg p-0 m-0 testLogin">
     <div class="LoginForm login-box">
       <div class="loginHeader">
         <img src="../assets/the-movie-factory.png" alt="logo" class="logo" />
@@ -37,25 +37,17 @@
             >
             <input type="password" class="form-control" v-model="newPassword" />
           </div>
-          <!-- MESSAGE SERVEUR BROWSER -->
-          <!--           <span id="messageServeur" class="text-warning">{{
-            serveurMessage
-          }}</span> -->
           <!-- 3 spans reset forgot signup -->
           <div class="reset d-flex justify-content-center">
-            <!-- <span @click="forgotPassword()">forgot </span>|<span
-              @click="resetPassword()"
-            >
-              reset </span
-            >| --><span class="btn" @click="handleSignup()"> New account</span>
-            <button
+            <span class="btn  " @click="handleSignup()"> New account</span>
+            <span
               type="button"
-              class="btn"
+              class="btn "
               data-toggle="modal"
               data-target="#staticBackdrop"
             >
               Forgot password
-            </button>
+            </span>
           </div>
 
           <!-- affichage conditionnel des boutons -->
@@ -79,24 +71,6 @@
             >
               Cancel
             </button>
-            <!--             <button
-              v-if="forgot"
-              type="submit"
-              class="btn btn-outline-info"
-              @click.prevent="sendMail()"
-              @keyup.enter="sendMail()"
-            >
-              Send
-            </button>
-            <button
-              v-if="reset"
-              type="submit"
-              class="btn btn-outline-warning"
-              @click.prevent="handleClick()"
-              @keyup.enter="handleClick()"
-            >
-              Reset
-            </button> -->
             <button
               v-if="signup"
               type="submit"
@@ -197,7 +171,6 @@ import axios from "axios";
 import { mapState } from "vuex";
 import MailerComponent from "./Mailer.vue";
 
-
 export default {
   components: { MailerComponent },
   name: "LoginForm",
@@ -296,8 +269,7 @@ export default {
       // email non valide
       this.checkIsEmailValid(this.email);
       if (!this.isEmailValid) return;
-      // username vide
-      // email existe déja
+
       // password vide
       this.checkIsPasswordEmpty(this.password);
       if (this.isPasswordEmpty) return;

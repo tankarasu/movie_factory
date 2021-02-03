@@ -4,9 +4,6 @@
 
 .login-box {
   width: 450px;
-  position: relative;
-  left: 50%;
-  transform: translateX(-225px);
   margin-top: 75px;
   height: auto;
   background: #111416ea;
@@ -186,6 +183,10 @@ blockquote {
   margin-bottom: 1rem;
 }
 
+.reset span {
+  color: #6c6c6c;
+}
+
 .reset span:hover {
   color: #ecf0f5;
 }
@@ -194,4 +195,35 @@ blockquote {
   display: flex;
   flex-direction: row;
   justify-content: center;
+}
+
+@media screen and (min-width: 768px) and (max-width: 992px) {
+}
+
+@media screen and (min-width: 576px) and (max-width: 767px) {
+}
+
+@media screen and (min-width: 576px) {
+  .login-box {
+
+    position: relative;
+    left: 50%;
+    transform: translateX(-225px);
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .login-box {
+    width: 100vw;
+    margin: 0 auto;
+    margin-top: 75px;
+    height: auto;
+    background: #111416ea;
+    text-align: center;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  }
+
+  .testimonial-quote {
+    right: 0;
+  }
 }

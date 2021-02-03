@@ -1,7 +1,6 @@
 .leftMenu {
   color: aliceblue;
   background: #111416ea;
-  height: 90vh;
   overflow: hidden;
   overflow-y: scroll;
 }

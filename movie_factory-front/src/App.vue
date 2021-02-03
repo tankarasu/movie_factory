@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="container">
+  <div id="app" class="container-lg p-0">
     <router-view />
   </div>
 </template>
@@ -41,5 +41,15 @@ export default {
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+
+.container,
+.container-fluid,
+.container-sm,
+.container-md,
+.container-lg,
+.container-xl {
+  margin-right: auto;
+  margin-left: auto;
 }
 </style>

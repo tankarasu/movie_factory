@@ -1,9 +1,9 @@
 <template>
   <div class="home">
     <Navbar></Navbar>
-    <div class="row contentPage">
-      <Menu class="col-2"></Menu>
-      <Main class="col-10"></Main>
+    <div class="row contentPage container-lg m-0 p-0">
+      <Menu class="col-lg-2"></Menu>
+      <Main class="col-lg-10"></Main>
     </div>
   </div>
 </template>
