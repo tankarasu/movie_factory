@@ -23,7 +23,7 @@
       methods:{
         emailToReset(){
             axios
-          .post("http://localhost:3050/user/forgot", {
+          .post("https://git.heroku.com/the-movie-factory-api.git/user/forgot", {
             recipientEmail: this.recipientEmail
           })
           .then((response) => {

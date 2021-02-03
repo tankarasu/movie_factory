@@ -18,7 +18,7 @@ export default {
   name: "Home",
   beforeMount() {
     axios
-      .get("http://localhost:3050/api/movie/categories")
+      .get("https://git.heroku.com/the-movie-factory-api.git/api/movie/categories")
       .then(async (response) => {
         let result = await response.data;
         this.$store.dispatch("fetchCategories", result);
@@ -26,7 +26,7 @@ export default {
       .catch((err) => console.log(err));
 
     axios
-      .get("http://localhost:3050/api/movie/")
+      .get("https://git.heroku.com/the-movie-factory-api.git/api/movie/")
       .then(async (response) => {
         let result = await response.data;
         this.$store.dispatch("fetchPopularFilm", result);

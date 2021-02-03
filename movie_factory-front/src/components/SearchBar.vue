@@ -28,7 +28,7 @@ export default {
       // TODO gestion des erreurs
       // TODO image par défaut si pas d'images
       axios
-        .get(`http://localhost:3050/api/movie/title/${this.searchValue}`)
+        .get(`https://git.heroku.com/the-movie-factory-api.git/api/movie/title/${this.searchValue}`)
         .then(async (Response) => {
           let result = await Response.data;
           this.$store.dispatch("fetchPopularFilm", result);

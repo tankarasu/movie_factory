@@ -32,7 +32,7 @@ export default {
   methods: {
     getPopular() {
       axios
-        .get("http://localhost:3050/api/movie/")
+        .get("https://git.heroku.com/the-movie-factory-api.git/api/movie/")
         .then(async (response) => {
           let result = await response.data;
           this.$store.dispatch("fetchPopularFilm", result);
@@ -49,7 +49,7 @@ export default {
     },
     getCommunityPage() {
       axios
-        .get("http://localhost:3050/user/alluser")
+        .get("https://git.heroku.com/the-movie-factory-api.git/user/alluser")
         .then(async (response) => {
           let result = await response.data;
           this.$store.commit("fetchAllUser", result);

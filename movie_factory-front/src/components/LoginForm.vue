@@ -310,7 +310,7 @@ export default {
 
       axios
 
-        .post(`${URL}/user/signup`, {
+        .post(`https://git.heroku.com/the-movie-factory-api.git/user/signup`, {
           email: this.email,
           password: this.password,
           username: this.username,

@@ -9,7 +9,6 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   // l'état (state) de l'application à un instant T
   state: {
-    apiBaseURL: "https://localhost/api/movie",
     cast: [], // TODO is necessary ?
     selectedFilm: {},
     isFavoriteFilm: false,
@@ -22,7 +21,8 @@ export default new Vuex.Store({
     videoPath: "", // TODO is necessary ?s
     filmSpec: {},
     login: {
-      getLoginURL: "http://localhost:3050/user/login",
+      getLoginURL:
+        "https://git.heroku.com/the-movie-factory-api.git/user/login",
       getLoggedUser: {},
       getFavorite: [],
       getSeen: [],
@@ -140,16 +140,22 @@ export default new Vuex.Store({
       // on va récupérer les infos du film via un appel axios
       // on va ajouter le film à selectedFilm
       axios
-        .get(`http://localhost:3050/api/movie/spec/${payload.id}`)
+        .get(
+          `https://git.heroku.com/the-movie-factory-api.git/api/movie/spec/${payload.id}`
+        )
         .then(async res => {
           // on récupère ici le casting du film
           axios
-            .get(`http://localhost:3050/api/movie/credits/${payload.id}`)
+            .get(
+              `https://git.heroku.com/the-movie-factory-api.git/api/movie/credits/${payload.id}`
+            )
             .then(async response => {
               // on récupère le lien de la vidéo
               response.data.cast = response.data.cast.slice(0, 5);
               axios
-                .get(`http://localhost:3050/api/movie/video/${payload.id}`)
+                .get(
+                  `https://git.heroku.com/the-movie-factory-api.git/api/movie/video/${payload.id}`
+                )
                 .then(async link => {
                   let thisLink =
                     "https://www.youtube.com/embed/" +
