@@ -197,7 +197,12 @@ import axios from "axios";
 import { mapState } from "vuex";
 import MailerComponent from "./Mailer.vue";
 
-const movieFactoryURL = process.env.MOVIE_FACTORY_API_URL;
+let URL = "";
+if (process.env == "production")
+  URL = "https://git.heroku.com/the-movie-factory-api.git";
+else URL = "http://localhost:3050";
+
+console.log(URL);
 
 export default {
   components: { MailerComponent },
@@ -305,7 +310,7 @@ export default {
 
       axios
 
-        .post(`${movieFactoryURL}/user/signup`, {
+        .post(`${URL}/user/signup`, {
           email: this.email,
           password: this.password,
           username: this.username,
