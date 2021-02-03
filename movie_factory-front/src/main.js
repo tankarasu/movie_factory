@@ -8,9 +8,7 @@ require("dotenv").config();
 // importation des éléments pour bootstrap
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 
-// cors
-const cors = require("cors");
-app.use(cors({ origin: "*", methods: ["GET", "POST", "PUT", "DELETE"] }));
+
 
 // Import Bootstrap an BootstrapVue CSS files (order is important)
 import "bootstrap/dist/css/bootstrap.css";
