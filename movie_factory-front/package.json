@@ -27,7 +27,6 @@
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/test-utils": "^1.0.3",
-    "vue-styleguidist": "^4.35.0",
     "vue-template-compiler": "^2.6.11"
   }
 }

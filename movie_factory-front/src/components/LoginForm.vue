@@ -25,8 +25,10 @@
           </div>
           <!-- USERNAME - PSEUDO -->
           <div class="form-group log" v-if="signup">
-            <label class="form-control-label" :style="{ color: passwordColor }"
-              >username</label
+            <label
+              class="form-control-label"
+              :style="{ color: usernameColor }"
+              >{{ labelUsername }}</label
             >
             <input type="text" class="form-control" v-model="username" />
           </div>
@@ -90,8 +92,6 @@
             <div>
               <blockquote>
                 <p v-if="!forgot && !reset && !signup">Le bouton rouge Régis</p>
-                <p v-if="forgot">Le bouton bleu Régis</p>
-                <p v-if="reset">Le bouton jaune Régis</p>
                 <p v-if="signup">Le bouton vert Régis</p>
               </blockquote>
               <cite><span>-La cité de la peur-</span></cite>
@@ -180,6 +180,7 @@ export default {
       isEmailEmpty: true,
       isEmailValid: false,
       isPasswordEmpty: true,
+      isUsernameEmpty: true,
       forgot: false,
       reset: false,
       signup: false,
@@ -193,6 +194,8 @@ export default {
       serveurMessage: "",
       labelEmail: "Email",
       emailColor: "#6c6c6c",
+      usernameColor: "#6c6c6c",
+      labelUsername: "",
       labelPassword: "Password",
       passwordColor: "#6c6c6C",
     };
@@ -274,17 +277,29 @@ export default {
       this.checkIsPasswordEmpty(this.password);
       if (this.isPasswordEmpty) return;
 
-      axios
+      // check username empty
+      this.checkIsUsernameEmpty(this.username);
+      if (this.isUsernameEmpty) return;
 
+      // action d'enrengistrer le User
+      axios
         .post(`https://the-movie-factory-api.herokuapp.com/user/signup`, {
           email: this.email,
           password: this.password,
           username: this.username,
         })
-        .then(response => {
-          if (response.data == "email déja utilisé") {
-            this.username = response.data + " Régis";
-            setTimeout(() => (this.username = ""), 2000);
+        .then(async response => {
+          let data = await response.data;
+          if (data == "Email déja utilisé") {
+            this.username = data + " Régis";
+            setTimeout(() => {
+              this.username = "";
+              this.password = "";
+              this.email = "";
+              this.signup = false;
+            }, 2000);
+          } else {
+            this.signup = false;
           }
         })
         .catch(err => console.log(err));
@@ -369,6 +384,19 @@ export default {
         }, 2500);
       } else {
         this.isPasswordEmpty = false;
+      }
+    },
+    checkIsUsernameEmpty(username) {
+      if (username.trim() === "") {
+        this.usernameColor = "red";
+        this.labelUsername = "Veuillez renseigner un pseudo";
+        setTimeout(() => {
+          this.labelUsername = "Username";
+          this.usernameColor = "#6c6c6c";
+          this.username = "";
+        }, 2500);
+      } else {
+        this.isUsernameEmpty = false;
       }
     },
   },
