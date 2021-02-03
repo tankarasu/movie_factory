@@ -22,7 +22,7 @@ export default new Vuex.Store({
     filmSpec: {},
     login: {
       getLoginURL:
-        "https://git.heroku.com/the-movie-factory-api.git/user/login",
+        "https://the-movie-factory-api.herokuapp.com/user/login",
       getLoggedUser: {},
       getFavorite: [],
       getSeen: [],
@@ -141,20 +141,20 @@ export default new Vuex.Store({
       // on va ajouter le film à selectedFilm
       axios
         .get(
-          `https://git.heroku.com/the-movie-factory-api.git/api/movie/spec/${payload.id}`
+          `https://the-movie-factory-api.herokuapp.com/api/movie/spec/${payload.id}`
         )
         .then(async res => {
           // on récupère ici le casting du film
           axios
             .get(
-              `https://git.heroku.com/the-movie-factory-api.git/api/movie/credits/${payload.id}`
+              `https://the-movie-factory-api.herokuapp.com/api/movie/credits/${payload.id}`
             )
             .then(async response => {
               // on récupère le lien de la vidéo
               response.data.cast = response.data.cast.slice(0, 5);
               axios
                 .get(
-                  `https://git.heroku.com/the-movie-factory-api.git/api/movie/video/${payload.id}`
+                  `https://the-movie-factory-api.herokuapp.com/api/movie/video/${payload.id}`
                 )
                 .then(async link => {
                   let thisLink =

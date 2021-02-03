@@ -172,7 +172,7 @@ export default {
   methods: {
     handleActor(actor) {
       axios
-        .get(`https://git.heroku.com/the-movie-factory-api.git/api/movie/person/${actor}`)
+        .get(`https://the-movie-factory-api.herokuapp.com/api/movie/person/${actor}`)
         .then(async (response) => {
           let result = await response.data.results.slice(0, 6);
           this.actorsFilm = result;
@@ -197,7 +197,7 @@ export default {
       // ajout du film aux favoris du User
       if (!isFavorite) {
         this.$store.commit("addToFavorite", film);
-        axios.put(`https://git.heroku.com/the-movie-factory-api.git/user/addfavorite`, {
+        axios.put(`https://the-movie-factory-api.herokuapp.com/user/addfavorite`, {
           email: this.login.getLoggedUser.email,
           filmId: film,
         });
@@ -205,7 +205,7 @@ export default {
 
       if (isFavorite) {
         this.$store.commit("removeFavorite", film);
-        axios.put(`https://git.heroku.com/the-movie-factory-api.git/user/removefavorite`, {
+        axios.put(`https://the-movie-factory-api.herokuapp.com/user/removefavorite`, {
           email: this.login.getLoggedUser.email,
           filmId: film,
         });
@@ -226,7 +226,7 @@ export default {
       // ajout du film aux favoris du User
       if (!isSeen) {
         this.$store.commit("addToSeen", film);
-        axios.put(`https://git.heroku.com/the-movie-factory-api.git/user/seen`, {
+        axios.put(`https://the-movie-factory-api.herokuapp.com/user/seen`, {
           email: this.login.getLoggedUser.email,
           filmId: film,
         });
@@ -234,7 +234,7 @@ export default {
 
       if (isSeen) {
         this.$store.commit("removeSeen", film);
-        axios.put(`https://git.heroku.com/the-movie-factory-api.git/user/removeseen`, {
+        axios.put(`https://the-movie-factory-api.herokuapp.com/user/removeseen`, {
           email: this.login.getLoggedUser.email,
           filmId: film,
         });
@@ -243,7 +243,7 @@ export default {
     },
     handleActorsFilm(index) {
       axios
-        .get(`https://git.heroku.com/the-movie-factory-api.git/api/movie/${index.id}`)
+        .get(`https://the-movie-factory-api.herokuapp.com/api/movie/${index.id}`)
         .then(async (response) => {
           let result = await response.data;
           this.$store.dispatch("addFilm", result);

@@ -18,7 +18,7 @@ export default {
       if (parseInt(this.name, 10) >= 2017 && parseInt(this.name, 10) <= 2021) {
         axios
           .get(
-            `https://git.heroku.com/the-movie-factory-api.git/api/movie/year/${parseInt(this.name, 10)}`
+            `https://the-movie-factory-api.herokuapp.com/api/movie/year/${parseInt(this.name, 10)}`
           )
           .then(async (Response) => {
             let result = await Response.data;
@@ -27,7 +27,7 @@ export default {
           .catch((err) => console.log(err));
       } else {
         axios
-          .get(`https://git.heroku.com/the-movie-factory-api.git/api/movie/genre/${this.id}`)
+          .get(`https://the-movie-factory-api.herokuapp.com/api/movie/genre/${this.id}`)
           .then(async (Response) => {
             let result = await Response.data;
             this.$store.dispatch("fetchPopularFilm", result);
