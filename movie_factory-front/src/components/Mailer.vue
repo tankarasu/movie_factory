@@ -37,7 +37,8 @@ export default {
               this.invalid=true;
             }else if(response.data=="not found"){
               this.notfound=true;
-            }else if(response.data=="failed"){
+            }else{
+              console.log(response.data);
               this.failed=true;
             }
 
