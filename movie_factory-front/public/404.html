@@ -4,23 +4,16 @@
 <head>
     <meta charset="utf-8" />
     <title>404</title>
-    <script type="text/javascript" src="../ghspa.js"></script>
+    <!--<script type="text/javascript" src="../ghspa.js"></script>-->
 </head>
 <script>
-  $(function() {
-          if (location.href != redirect) {
-              window.location.replace(location.href);
-          } else {
-            $('#message').html('')
-            $('#message-detail').html('Still here at the index.html file')
-          }
-      })
+        console.log("Current location"+location.href);
+        if (location.href.includes("/reset/")) {
+            window.location.replace(location.href);
+        }
 </script>
 <body>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <p>404</p>
 </body>
 
 </html>
