@@ -5,6 +5,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import Film from "../views/Film.vue";
+import Reset from "../views/Reset.vue";
 import ProfilPage from "../views/ProfilPage.vue";
 import CommunityPage from "../views/CommunityPage.vue";
 
@@ -26,6 +27,11 @@ const routes = [
     path: "/film",
     name: "Film",
     component: Film,
+  },
+  {
+    path: "/reset/:email",
+    name: "Reset",
+    component: Reset,
   },
   { path: "/profil", name: "profil", component: ProfilPage },
   { path: "/community", name: "community", component: CommunityPage },

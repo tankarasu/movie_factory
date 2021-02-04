@@ -111,7 +111,7 @@
       aria-hidden="true"
     >
       <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-content bg-dark border-0">
           <div class="modal-header">
             <h5 class="modal-title" id="staticBackdropLabel">
               Forgot password
@@ -127,7 +127,6 @@
           </div>
           <div class="modal-body d-flex justify-content-center pb-0">
             <input
-              class="pb-0 mb-0"
               type="text"
               v-model="forgotInput"
               placeholder="regis@mail.fr"
@@ -206,10 +205,13 @@ export default {
   },
   // regroupe les methodes du composants
   methods: {
-    handleForgot() {
-      this.isForgot = true;
-      this.recipientEmail = this.forgotInput;
-      this.forgotInput = "";
+    handleForgot(){
+      this.isForgot=true;
+      this.recipientEmail=this.forgotInput;
+      this.forgotInput="";
+      setTimeout(() => {
+        this.isForgot=false;
+      }, 5000);
     },
     handleClick() {
       let log = this.login.getLoginURL;

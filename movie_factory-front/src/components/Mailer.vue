@@ -2,9 +2,8 @@
     <div>
         <!-- v-if boolean sent true, message envoi mail ok. Else, msg pas ok -->
         <!-- TODO voir côté api pourquoi erreur rendu même si envoi Ok-->
-        <div>	{{ recipientEmail }} </div>
-        <span class="text-success" v-if="sent">Message sent to {{ recipientEmail }} ! Please check your inbox</span>
-        <span class="text-danger" v-else>An error occured</span>
+        <span class="text-success" v-if="sent">Message sent to {{ recipientEmail }} !</br> Please check your inbox</span>
+        <span class="text-danger" v-if="error">An error occured</span>
     </div>
 </template>
 
@@ -16,7 +15,8 @@
 
       data(){
         return{
-          sent:false,
+          sent: null,
+          error: null,
         }
       },
 
@@ -27,16 +27,23 @@
             recipientEmail: this.recipientEmail
           })
           .then((response) => {
-            if (response.data) {
+            if (response.data=="success") {
               this.sent=true;
+            }else if(response.data=="invalid"||response.data=="not found"||response.data=="failed"){
+              this.error=true;
             }
-            console.log("Front: Réponse recue: "+response.data);
+
           })
-          .catch((err) => console.log("Front: Catch: "+err));
+          .catch((err) => console.log(err));
           }
         },
         created(){
           this.emailToReset();
+          setTimeout(() => {
+            this.error = "";
+            this.sent = "";
+          }, 5000);
+          
         }
       }
 
