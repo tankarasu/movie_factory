@@ -3,7 +3,9 @@
         <!-- v-if boolean sent true, message envoi mail ok. Else, msg pas ok -->
         <!-- TODO voir côté api pourquoi erreur rendu même si envoi Ok-->
         <span class="text-success" v-if="sent">Message sent to {{ recipientEmail }} !</br> Please check your inbox</span>
-        <span class="text-danger" v-if="error">An error occured</span>
+        <span class="text-danger" v-if="invalid">Invalid email syntax</span>
+        <span class="text-danger" v-if="notfound">email not found</span>
+        <span class="text-danger" v-if="failed">Sending failed</span>
     </div>
 </template>
 
@@ -16,7 +18,9 @@ export default {
       data(){
         return{
           sent: null,
-          error: null,
+          invalid: null,
+          notfound: null,
+          failed: null
         }
       },
 
@@ -29,8 +33,12 @@ export default {
           .then((response) => {
             if (response.data=="success") {
               this.sent=true;
-            }else if(response.data=="invalid"||response.data=="not found"||response.data=="failed"){
-              this.error=true;
+            }else if(response.data=="invalid"){
+              this.invalid=true;
+            }else if(response.data=="not found"){
+              this.notfound=true;
+            }else if(response.data=="failed"){
+              this.failed=true;
             }
 
           })
