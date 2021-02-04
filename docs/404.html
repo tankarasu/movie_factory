@@ -6,7 +6,16 @@
     <title>404</title>
     <script type="text/javascript" src="../ghspa.js"></script>
 </head>
-
+<script>
+  $(function() {
+          if (location.href != redirect) {
+              window.location.replace(location.href);
+          } else {
+            $('#message').html('')
+            $('#message-detail').html('Still here at the index.html file')
+          }
+      })
+</script>
 <body>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
