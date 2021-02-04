@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- selectedFilm = (film choisi) ==> {Le commentaire qui tue} -->
     <navbar></navbar>
     <div class="selectedFilm">
       <div id="filmHeader">
@@ -33,25 +34,25 @@
 
           <span
             class="badge badge-success badges"
-            v-if="!isFavoriteFilm"
+            v-if="!this.$store.state.isFavoriteFilm"
             @click="addFavorite(selectedFilm)"
             >Add</span
           >
           <span
-            v-if="isFavoriteFilm"
+            v-if="this.$store.state.isFavoriteFilm"
             class="badge badge-danger badges"
             @click="addFavorite(selectedFilm)"
             >Remove</span
           >
           <span> Seen</span>
           <span
-            v-if="!isSeenFilm"
+            v-if="!this.$store.state.isSeenFilm"
             class="badge badge-success"
             @click="addToSeen(selectedFilm)"
             >Add</span
           >
           <span
-            v-if="isSeenFilm"
+            v-if="this.$store.state.isSeenFilm"
             class="badge badge-danger"
             @click="addToSeen(selectedFilm)"
             >Remove</span
@@ -172,12 +173,14 @@ export default {
   methods: {
     handleActor(actor) {
       axios
-        .get(`https://the-movie-factory-api.herokuapp.com/api/movie/person/${actor}`)
-        .then(async (response) => {
+        .get(
+          `https://the-movie-factory-api.herokuapp.com/api/movie/person/${actor}`
+        )
+        .then(async response => {
           let result = await response.data.results.slice(0, 6);
           this.actorsFilm = result;
         })
-        .catch((err) => console.log(err));
+        .catch(err => console.log(err));
     },
     /**
      * prends un film et l'ajoute dans un tableau contenant tous les films favoris
@@ -197,18 +200,24 @@ export default {
       // ajout du film aux favoris du User
       if (!isFavorite) {
         this.$store.commit("addToFavorite", film);
-        axios.put(`https://the-movie-factory-api.herokuapp.com/user/addfavorite`, {
-          email: this.login.getLoggedUser.email,
-          filmId: film,
-        });
+        axios.put(
+          `https://the-movie-factory-api.herokuapp.com/user/addfavorite`,
+          {
+            email: this.login.getLoggedUser.email,
+            filmId: film,
+          }
+        );
       }
 
       if (isFavorite) {
         this.$store.commit("removeFavorite", film);
-        axios.put(`https://the-movie-factory-api.herokuapp.com/user/removefavorite`, {
-          email: this.login.getLoggedUser.email,
-          filmId: film,
-        });
+        axios.put(
+          `https://the-movie-factory-api.herokuapp.com/user/removefavorite`,
+          {
+            email: this.login.getLoggedUser.email,
+            filmId: film,
+          }
+        );
       }
       this.$store.commit("toggleFavorite");
     },
@@ -234,62 +243,28 @@ export default {
 
       if (isSeen) {
         this.$store.commit("removeSeen", film);
-        axios.put(`https://the-movie-factory-api.herokuapp.com/user/removeseen`, {
-          email: this.login.getLoggedUser.email,
-          filmId: film,
-        });
+        axios.put(
+          `https://the-movie-factory-api.herokuapp.com/user/removeseen`,
+          {
+            email: this.login.getLoggedUser.email,
+            filmId: film,
+          }
+        );
       }
       this.$store.commit("toggleSeenFilm");
     },
     handleActorsFilm(index) {
       axios
-        .get(`https://the-movie-factory-api.herokuapp.com/api/movie/${index.id}`)
-        .then(async (response) => {
+        .get(
+          `https://the-movie-factory-api.herokuapp.com/api/movie/${index.id}`
+        )
+        .then(async response => {
           let result = await response.data;
           this.$store.dispatch("addFilm", result);
           this.actorsFilm = [];
         })
-        .catch((err) => console.log(err));
+        .catch(err => console.log(err));
     },
-  },
-  mounted() {
-    // quand le composant est monté
-    let favorite = this.login.getFavorite;
-    let seen = this.login.getSeen;
-    // on suppose avec index -1 que le film n'est pas favori
-    let index = -1;
-    for (let i = 0; i < favorite.length; i++) {
-      // si un film dans les favoris à le même id que le film courant
-      // son index n'est plus -1 donc présent
-      if (favorite[i].id == this.selectedFilm.id) {
-        index = i;
-      }
-    }
-    // si le film est absent mais que le marqueur dit présent
-    if (index == -1 && this.isFavoriteFilm) {
-      this.$store.commit("toggleFavorite");
-    }
-    // si le film est présent mais que le marqueur dit absent
-    if (index != -1 && this.isFavoriteFilm) {
-      this.$store.commit("toggleFavorite");
-    }
-     index = -1;
-    for (let i = 0; i < seen.length; i++) {
-      // si un film dans les seen à le même id que le film courant
-      // son index n'est plus -1 donc présent
-      if (seen[i].id == this.selectedFilm.id) {
-        index = i;
-      }
-    }
-    // si le film est absent mais que le marqueur dit présent
-    if (index == -1 && this.isSeenFilm) {
-      this.$store.commit("toggleSeenFilm");
-    }
-    // si le film est présent mais que le marqueur dit absent
-    if (index != -1 && this.isSeenFilm) {
-      this.$store.commit("toggleFavorite");
-    }
-  
   },
 };
 </script>

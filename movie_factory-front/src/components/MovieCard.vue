@@ -21,7 +21,7 @@
         <p class="card-text">
           <small class="text-muted vote">vote average: {{ vote }}</small>
         </p>
-      </div>
+      </div> 
     </div>
   </div>
 </template>
