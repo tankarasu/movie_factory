@@ -21,8 +21,7 @@ export default new Vuex.Store({
     videoPath: "", // TODO is necessary ?s
     filmSpec: {},
     login: {
-      getLoginURL:
-        "https://the-movie-factory-api.herokuapp.com/user/login",
+      getLoginURL: "https://the-movie-factory-api.herokuapp.com/user/login",
       getLoggedUser: {},
       getFavorite: [],
       getSeen: [],
@@ -171,6 +170,37 @@ export default new Vuex.Store({
                   } else {
                     let result = { ...res.data, ...response.data };
                     await context.commit("addOneFilm", result);
+                  }
+                  let index = -1;
+                  let seen = this.state.login.getSeen;
+                  let favorite = this.state.login.getFavorite;
+
+                  for (let i = 0; i < seen.length; i++) {
+                    if (favorite[i].id == this.payload.id) {
+                      index = i;
+                    }
+                  }
+                  if (index == -1 && this.state.isSeenFilm) {
+                    context.commit("toggleSeenFilm");
+                  }
+
+                  if (index != -1 && !this.state.isSeenFilm) {
+                    context.commit("toggleSeenFilm");
+                  }
+
+                  index = -1;
+                  for (let i = 0; i < favorite.length; i++) {
+                    if (favorite[i].id == this.payload.id) {
+                      index = i;
+                    }
+                  }
+
+                  if (index == -1 && this.state.isFavoriteFilm) {
+                    context.commit("toggleFavorite");
+                  }
+
+                  if (index != -1 && !this.state.isFavoriteFilm) {
+                    context.commit("toggleFavorite");
                   }
                 });
             });

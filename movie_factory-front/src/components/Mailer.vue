@@ -8,10 +8,10 @@
 </template>
 
 <script>
-    import axios from "axios";
-    export default {
-      name: "MailerComponent",
-      props: ["recipientEmail"],
+import axios from "axios";
+export default {
+  name: "MailerComponent",
+  props: ["recipientEmail"],
 
       data(){
         return{

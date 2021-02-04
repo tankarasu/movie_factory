@@ -21,3 +21,4 @@ export default {
 <style scoped>
 @import "./libs/profilcomponent.css";
 </style>
+ 
